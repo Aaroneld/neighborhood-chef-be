@@ -11,13 +11,12 @@ const cors = require("cors");
 
 const users = require("../models/users/user-models");
 
-const { isEmailUnique } = require("../middleware/isEmailUnique.js")
+const { isEmailUnique } = require("../middleware/isEmailUnique.js");
 
 const readFile = promisify(fs.readFile);
 const router = express.Router();
 router.use(express.json());
 router.use(cors());
-
 
 router.get("/", (req, res) => {
   res.status(200).send("<h1>Working!</h1>");
@@ -75,6 +74,8 @@ router.post("/register", cors(), isEmailUnique, buildHTML, async (req, res) => {
       replyTo: process.env.EMAIL_NAME,
     };
 
+    console.log(mailOptions);
+
     if (mailOptions.html) {
       await transport.sendMail(mailOptions, async (err, response) => {
         try {
@@ -91,22 +92,18 @@ router.post("/register", cors(), isEmailUnique, buildHTML, async (req, res) => {
     }
 
     temp.cleanup((err, stat) => {
-      console.log(stat);
+      console.log(stat, "stat");
       if (err) console.log(err);
     });
 
     const addedUser = await users.add(databaseUserObject);
 
     addedUser
-      ? res
-        .status(201)
-        .json({
-          ssuccess: true,
+      ? res.status(201).json({
+          success: true,
           message: "User created -- activation required",
         })
-      : res
-        .status(500)
-        .json({
+      : res.status(500).json({
           success: false,
           trace: err.stack,
           message: "There was an issue with registration",
@@ -130,6 +127,7 @@ router.get("/activate", async (req, res, next) => {
     if (compareHash.toString() === formattedId) {
       const user = await users.findBy({ email });
 
+      console.log(email);
       const oktaUser = {
         profile: {
           firstName: user[0].firstName,
@@ -145,8 +143,10 @@ router.get("/activate", async (req, res, next) => {
 
       const stringified = JSON.stringify(oktaUser);
 
+      console.log(stringified);
+
       const response = await fetch(
-        `${process.env.OKTA_BASE_URL}/api/v1/users`,
+        `https://${process.env.OKTA_BASE_URL}/api/v1/users?activate=true`,
         {
           method: "post",
           body: stringified,
@@ -179,18 +179,18 @@ router.get("/activate", async (req, res, next) => {
           );
         next;
       } else {
-        res
-          .status(500)
-          .json({
-            success: false,
-            message: "Issue Creating Credentials with Okta",
-          });
+        res.status(500).json({
+          success: false,
+          message: "Issue Creating Credentials with Okta",
+        });
       }
     } else {
       res.status(400).json({ success: false, message: "Not authorized" });
     }
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res
+      .status(500)
+      .json({ success: false, message: err.message, stack: err.stack });
   }
 });
 
@@ -212,7 +212,7 @@ router.post("/initialChangePassword", async (req, res, next) => {
 
     if (formattedHash === compareHash.toString()) {
       const client = new okta.Client({
-        orgUrl: `${process.env.OKTA_BASE_URL}`,
+        orgUrl: `https://${process.env.OKTA_BASE_URL}`,
         token: `${process.env.OKTA_API_TOKEN}`,
       });
 
