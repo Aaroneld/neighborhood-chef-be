@@ -117,6 +117,8 @@ router.get("/activate", async (req, res, next) => {
   try {
     const { id, email, tempPass } = req.query;
 
+    console.log(req.query);
+
     const compareHash = crypto
       .createHmac("sha256", process.env.EMAIL_HASH_SECRET)
       .update(email)
