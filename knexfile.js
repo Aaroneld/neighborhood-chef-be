@@ -38,9 +38,11 @@ module.exports = {
 
   production: {
     client: "pg",
-    connection: process.env.POSTGRES_CONNECTION_STRING,
-    ssl: {
-      rejectUnauthorized: false,
+    connection: {
+      connectionString: process.env.POSTGRES_CONNECTION_STRING,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
     pool: {
       min: 2,
