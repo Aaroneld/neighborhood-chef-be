@@ -1,48 +1,49 @@
-# The name of the workflow
 name: build
-
-# What conditions trigger the workflow
-#  In this case, pull requests on master branch
 on:
-  pull_request:
+  push:
     branches:
       - master
-
-# The jobs that will be run, usually in parallel
+    tags:
+      - '!*' # Do not execute on tags
+    paths:
+      - src/*
+      - test/*
+      - '*.json'
+      - yarn.lock
+  pull_request:
+    paths:
+      - '!*.MD'
 jobs:
-  tests:
-    name: Test and publish coverage
+  test:
+    strategy:
+      matrix:
+        platform: [ ubuntu-latest, macOS-latest ]
+        node: [ '12', '10' ]
+    name: test/node ${{ matrix.node }}/${{ matrix.platform }}
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@master
+      with:
+        node-version: ${{ matrix.node }}
+    - run: npm install -g yarn
+    - run: yarn install
+    - run: yarn build
+    - run: yarn test
+  coverage:
+    needs: [ test ]
+    name: coverage
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout branch
-        # A GitHub action for checking out the current branch
-        uses: actions/checkout@master
-
-      - name: Install node
-        # A GitHub action to setup Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: "12"
-
-      - name: Install packages
-        run: yarn install
-
-      # - name: Run Tests
-      #   run: yarn test
-
-      - name: Determine and publish test coverage
-        # A GitHub action for running tests and publishing coverage
-        uses: paambaati/codeclimate-action@v2.4.4
-        env:
-          # An environment variable, the value is a GitHub repo secret
-          CC_TEST_REPORTER_ID: 12a500dc24c9e35c38e5ae3f65265f29d8f53f19360024642fb4caf970159fd6
-        with:
-          # Run our `coverage` script in our `package.json`
-          coverageCommand: yarn coverage
-          # By default, this looks for a `coverage` folder in the root of your project, but you may need to change this
-          coverageLocations: "./coverage/clover.xml:clover"
-          debug: true
-          
-          needs: [ test ]
-
-
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@master
+      with:
+        node-version: '12'
+    - run: npm install -g yarn
+    - run: yarn install
+    - run: yarn build
+    - uses: paambaati/codeclimate-action@v2.2.4
+      env:
+        CC_TEST_REPORTER_ID: 12a500dc24c9e35c38e5ae3f65265f29d8f53f19360024642fb4caf970159fd6
+      with:
+        coverageCommand: yarn coverage
