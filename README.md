@@ -3,8 +3,8 @@
 The back-end is deployed on AWS RDS at [be.ourneighborhoodchef.com](https://be.ourneighborhoodchef.com)
 
 ![build](https://github.com/Lambda-School-Labs/neighborhood-chef-be/workflows/build/badge.svg)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e704a7d41bbcb50a6783/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/neighborhood-chef-be/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/e704a7d41bbcb50a6783/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/neighborhood-chef-be/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/12a500dc24c9e35c38e5ae3f65265f29d8f53f19360024642fb4caf970159fd6/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/neighborhood-chef-be/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/12a500dc24c9e35c38e5ae3f65265f29d8f53f19360024642fb4caf970159fd6/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/neighborhood-chef-be/test_coverage)
 ![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)
 
 ## Contributors
