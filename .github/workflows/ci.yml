@@ -32,7 +32,7 @@ jobs:
 
       - name: Determine and publish test coverage
         # A GitHub action for running tests and publishing coverage
-        uses: paambaati/codeclimate-action@v2.4.0
+        uses: paambaati/codeclimate-action@v2.4.4
         env:
           # An environment variable, the value is a GitHub repo secret
           CC_TEST_REPORTER_ID: 12a500dc24c9e35c38e5ae3f65265f29d8f53f19360024642fb4caf970159fd6
@@ -42,3 +42,7 @@ jobs:
           # By default, this looks for a `coverage` folder in the root of your project, but you may need to change this
           coverageLocations: "./coverage/clover.xml:clover"
           debug: true
+          
+          needs: [ test ]
+
+
