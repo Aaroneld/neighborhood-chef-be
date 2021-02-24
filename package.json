@@ -4,6 +4,8 @@
   "description": "Neighborhood Chef - Backend/API",
   "main": "index.js",
   "scripts": {
+    "migrate": "knex migrate:lastest",
+    "seed": "knex seed:run",
     "test": "cross-env NODE_ENV=development jest --runInBand --detectOpenHandles --coverage",
     "test:watch": "cross-env NODE_ENV=development NO_LOGGER=true jest --watch --runInBand --detectOpenHandles --coverage",
     "test:watchTroubleshoot": "cross-env NODE_ENV=development NO_LOGGER=true jest --watch --runInBand --detectOpenHandles",
