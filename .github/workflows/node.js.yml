@@ -51,6 +51,6 @@ jobs:
         postgresql user: dev
         postgresql password: dev
    
-    - run: knex migrate:latest 
-    - run: knex seed:run
-    - run: yarn test 
+    - run: npm run migrate 
+    - run: npm run seed
+    - run: npm test 
