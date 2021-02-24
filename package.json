@@ -15,7 +15,7 @@
     "server:testing": "cross-env NODE_ENV=development nodemon -r dotenv-safe/config index.js",
     "start": "node -r dotenv-safe/config index.js",
     "poststart": "",
-    "coverage": "cross-env NODE_ENV=development jest --coverage --detectOpenHandles --forceExit || true"
+    "coverage": "cross-env NODE_ENV=development jest  --coverageDirectory='coverage' --coverage --detectOpenHandles --forceExit || true"
   },
   "jest": {
     "testEnvironment": "node",
