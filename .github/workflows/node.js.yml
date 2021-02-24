@@ -37,6 +37,7 @@ jobs:
     - uses: actions/checkout@v2
 
      #set up node 
+    - run: yarn global add knex
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -50,7 +51,7 @@ jobs:
         postgresql db: databasename-test
         postgresql user: dev
         postgresql password: dev
-    - run: yarn global add knex
+   
     - run: knex migrate:latest 
     - run: knex seed:run
     - run: yarn test 
