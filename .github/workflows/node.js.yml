@@ -50,7 +50,7 @@ jobs:
         postgresql db: databasename-test
         postgresql user: dev
         postgresql password: dev
-    - run: yarn install -g knex 
+    - run: yarn global add knex
     - run: knex migrate:latest 
     - run: knex seed:run
     - run: yarn test 
