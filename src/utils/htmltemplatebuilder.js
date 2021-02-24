@@ -1,8 +1,8 @@
-const fs = require("fs");
-const { promisify } = require("util");
-const crypto = require("crypto");
-const temp = require("temp");
-const os = require("os");
+const fs = require('fs');
+const { promisify } = require('util');
+const crypto = require('crypto');
+const temp = require('temp');
+const os = require('os');
 
 const writeToFile = promisify(fs.open);
 const asyncTempOpen = promisify(temp.open);
@@ -10,14 +10,14 @@ const asyncWrite = promisify(fs.write);
 const asyncClose = promisify(fs.close);
 
 const makeTempPassword = (length) => {
-  let result = "";
+  let result = '';
   const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?$&*^";
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?';
   const charactersLength = characters.length;
-  const specialChars = "!";
-  const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
-  const numbers = "1234567890";
+  const specialChars = '!';
+  const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+  const numbers = '1234567890';
   for (var i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
@@ -69,9 +69,9 @@ async function buildHTML(req, res, next) {
     const { firstName, email } = req.body;
 
     const base64Hash = crypto
-      .createHmac("sha256", `${process.env.EMAIL_HASH_SECRET}`)
+      .createHmac('sha256', `${process.env.EMAIL_HASH_SECRET}`)
       .update(email)
-      .digest("base64");
+      .digest('base64');
     // console.log('here', base64Hash);
     const tempPassword = makeTempPassword(7);
     // console.log('here', tempPassword);
@@ -91,9 +91,9 @@ async function buildHTML(req, res, next) {
     // const close = await asynclose(file);
 
     temp.track();
-    const formattedHash = base64Hash.replace(/\//g, "");
+    const formattedHash = base64Hash.replace(/\//g, '');
     await asyncTempOpen(
-      { suffix: ".html", prefix: formattedHash },
+      { suffix: '.html', prefix: formattedHash },
       async (err, info) => {
         try {
           if (!err) {
@@ -101,23 +101,19 @@ async function buildHTML(req, res, next) {
             req.tempPathName = info.path;
             await asyncWrite(info.fd, template, async (err) => {
               if (err)
-                res
-                  .status(500)
-                  .json({
-                    where: "asyncTempOpen",
-                    message: err,
-                    success: false,
-                  });
+                res.status(500).json({
+                  where: 'asyncTempOpen',
+                  message: err,
+                  success: false,
+                });
 
               await asyncClose(info.fd, (err) => {
                 if (err)
-                  res
-                    .status(500)
-                    .json({
-                      where: "asyncTempOpen",
-                      message: err,
-                      success: false,
-                    });
+                  res.status(500).json({
+                    where: 'asyncTempOpen',
+                    message: err,
+                    success: false,
+                  });
                 // console.log("I got here");
 
                 // console.log(template);
@@ -125,36 +121,30 @@ async function buildHTML(req, res, next) {
               });
             });
           } else {
-            res
-              .status(500)
-              .json({
-                where: "asyncTempOpen",
-                message: err.message,
-                success: false,
-              });
+            res.status(500).json({
+              where: 'asyncTempOpen',
+              message: err.message,
+              success: false,
+            });
           }
         } catch (err) {
-          res
-            .status(500)
-            .json({
-              err,
-              message: err.message,
-              stack: err.stack,
-              pathname: formattedHash,
-            });
+          res.status(500).json({
+            err,
+            message: err.message,
+            stack: err.stack,
+            pathname: formattedHash,
+          });
         }
       }
     );
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        where: "BuildHTML",
-        success: false,
-        trace: err.stack,
-        message: err.message,
-        err,
-      });
+    res.status(500).json({
+      where: 'BuildHTML',
+      success: false,
+      trace: err.stack,
+      message: err.message,
+      err,
+    });
   }
 }
 
