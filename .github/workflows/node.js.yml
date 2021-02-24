@@ -23,26 +23,25 @@ jobs:
     - name: Checkout 
       uses: actions/checkout@v1
     #set up caching 
-    - name: Get yarn cache
-      id: yarn-cache
+    - name: Get npm cache
+      id: npm-cache
       run: echo "::set-output name=dir::$(yarn cache dir)"
     
     - uses: actions/cache@v1
       with:
-        path: ${{ steps.yarn-cache.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        path: ${{ steps.yarn-npm.outputs.dir }}
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/npm.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
    
     - uses: actions/checkout@v2
 
      #set up node 
-    - run: yarn global add knex
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-        run: yarn install
+        run: npm install
     
     - name: Setup PostgreSQL
       uses: harmon758/postgresql-action@v1.0.0
