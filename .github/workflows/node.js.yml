@@ -8,7 +8,14 @@ on:
   pull_request:
     branches: [ master ]
 env:
-  NODE_ENV: development 
+  NODE_ENV: development
+  POSTGRES_ADMIN_USER: dev
+  POSTGRES_ADMIN_PASSWORD: dev
+  POSTGRES_HOSTNAME: localhost
+  POSTGRES_PORT: 5432
+  POSTGRES_DATABASE: NHC-test
+  POSTGRES_CONNECTION_STRING: postgresql://dev:dev@localhost:5432/NHC-test
+
 
 jobs:
   build:
