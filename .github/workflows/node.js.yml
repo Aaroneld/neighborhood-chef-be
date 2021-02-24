@@ -50,7 +50,7 @@ jobs:
         postgresql db: databasename-test
         postgresql user: dev
         postgresql password: dev
-   
+    - run: npm ci
     - run: npm run migrate 
     - run: npm run seed
     - run: npm test 
