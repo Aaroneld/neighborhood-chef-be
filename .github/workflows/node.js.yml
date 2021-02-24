@@ -14,7 +14,7 @@ env:
   POSTGRES_HOSTNAME: localhost
   POSTGRES_PORT: 5432
   POSTGRES_DATABASE: NHC-test
-  POSTGRES_CONNECTION_STRING: postgresql://dev:dev@localhost:5432/NHC-test
+  POSTGRES_CONNECTION_STRING: postgresql://dev:dev@localhost:5432/nhc-test
 
 
 jobs:
