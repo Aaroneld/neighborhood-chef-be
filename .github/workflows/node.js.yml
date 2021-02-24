@@ -69,7 +69,7 @@ jobs:
       with:
           node-version: ${{ matrix.node-version }}
           run: npm install
-    - run: npm run coverage --covDir=$RUNNER_TEMP
+    - run: npm run coverage --covDir=/home/runner/work/_temp
     - run: cd $RUNNER_TEMP && ls
     
     
