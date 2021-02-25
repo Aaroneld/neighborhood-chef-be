@@ -17,7 +17,7 @@
     "poststart": "",
     "coverage": "cross-env NODE_ENV=development jest  --coverageDirectory=process.env.COVERAGE_LOCATION --coverage --detectOpenHandles --forceExit || true",
     "coverage-ci": "jest  --coverageDirectory=/home/runner/work/_temp --coverage --detectOpenHandles --forceExit || true",
-    "code-climate": "./cc-test-reporter -t lcov /home/runner/work/_temp/coverage/lcov.info"
+    "code-climate": "./cc-test-reporter format-coverage -t lcov /home/runner/work/_temp/coverage/lcov.info"
   },
   "jest": {
     "testEnvironment": "node",
