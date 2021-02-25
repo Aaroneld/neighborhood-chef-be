@@ -4,7 +4,7 @@ The back-end is deployed on AWS RDS at [be.ourneighborhoodchef.com](https://be.o
 
 ![build](https://github.com/Lambda-School-Labs/neighborhood-chef-be/workflows/build/badge.svg)
 <a href="https://codeclimate.com/github/Aaroneld/neighborhood-chef-be/maintainability"><img src="https://api.codeclimate.com/v1/badges/3cd3e60d599dcbfebc58/maintainability" /></a>
-<a href="https://codeclimate.com/github/codeclimate/codeclimate/test_coverage"><img src="https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage" /></a>
+<a href="https://codeclimate.com/github/Aaroneld/neighborhood-chef-be/test_coverage"><img src="https://api.codeclimate.com/v1/badges/3cd3e60d599dcbfebc58/test_coverage" /></a>
 ![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)
 
 ## Contributors
