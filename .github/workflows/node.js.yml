@@ -86,7 +86,7 @@ jobs:
     - run: npm run coverage-ci
     - run: pwd
     - run: ls -al
-    - run: npm run code-climate
+    - run: sudo npm run code-climate
     - run: sudo /home/runner/work/neighborhood-chef-be/neighborhood-chef-be/cc-test-reporter upload-coverage 
 
     
