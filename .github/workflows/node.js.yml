@@ -16,6 +16,7 @@ env:
   POSTGRES_DATABASE: NHC-test
   POSTGRES_CONNECTION_STRING: postgresql://dev:dev@localhost:5432/nhc-test
   COVERAGE_LOCATION: /home/runner/work/_temp
+  CC_TEST_REPORTER_ID: 12a500dc24c9e35c38e5ae3f65265f29d8f53f19360024642fb4caf970159fd6
 
 jobs:
   test:     
@@ -85,7 +86,8 @@ jobs:
     - run: npm run seed
     - run: npm run coverage-ci
     - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-0.7.0-linux-amd64 > ./cc-test-reporter
-    - run: ls 
+    - run: ./cc-test-reporter format-coverage -t lcov /home/runner/work/_temp/lcov.info
+    - run: ./cc-test-reporter upload-coverage 
     - run: cd  /home/runner/work/_temp && touch temp.test
     - run: cd /home/runner/work/_temp && ls -al
     
