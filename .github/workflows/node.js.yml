@@ -86,10 +86,8 @@ jobs:
     - run: npm run coverage-ci
     - run: pwd
     - run: ls -al
-    - run: echo '/home/runner/work/neighborhood-chef-be/neighborhood-chef-be' >> $GITHUB_PATH
-    - run: echo $GITHUB_PATH
-    - run: sudo cc-test-reporter format-coverage -t lcov /home/runner/work/_temp/coverage/lcov.info
-    - run: cc-test-reporter upload-coverage 
+    - run: sudo /home/runner/work/neighborhood-chef-be/neighborhood-chef-be/cc-test-reporter format-coverage -t lcov /home/runner/work/_temp/coverage/lcov.info
+    - run: /home/runner/work/neighborhood-chef-be/neighborhood-chef-be/cc-test-reporter upload-coverage 
 
     
     
