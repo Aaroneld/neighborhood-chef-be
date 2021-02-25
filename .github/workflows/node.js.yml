@@ -73,7 +73,16 @@ jobs:
       with:
           node-version: ${{ matrix.node-version }}
           run: npm install
+    - name: Setup PostgreSQL
+      uses: harmon758/postgresql-action@v1.0.0
+      with:
+          postgresql version: 11
+          postgresql db: nhc-test
+          postgresql user: dev
+          postgresql password: dev
     - run: npm ci
+    - run: npm run migrate 
+    - run: npm run seed
     - run: npm run coverage-ci
     - run: cd  /home/runner/work/_temp && touch temp.test
     - run: cd /home/runner/work/_temp && ls -al
