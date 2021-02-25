@@ -84,7 +84,7 @@ jobs:
     - run: npm run migrate 
     - run: npm run seed
     - run: npm run coverage-ci
-    - run: cd /home/runner/work/_temp && ls -al
+    - run: ls -al
     - run: sudo ./cc-test-reporter format-coverage -t lcov /home/runner/work/_temp/coverage/lcov.info
     - run: ./cc-test-reporter upload-coverage 
 
