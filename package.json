@@ -16,7 +16,7 @@
     "start": "node -r dotenv-safe/config index.js",
     "poststart": "",
     "coverage": "cross-env NODE_ENV=development jest  --coverageDirectory=process.env.COVERAGE_LOCATION --coverage --detectOpenHandles --forceExit || true",
-    "coverage-ci": "cross-env NODE_ENV=development jest  --coverageDirectory=/home/runner/work/_temp --coverage --detectOpenHandles --forceExit || true"
+    "coverage-ci": "jest  --coverageDirectory=/home/runner/work/_temp --coverage --detectOpenHandles --forceExit || true"
   },
   "jest": {
     "testEnvironment": "node",
