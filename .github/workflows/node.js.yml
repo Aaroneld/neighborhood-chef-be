@@ -62,6 +62,9 @@ jobs:
   coverage:
     needs: [test]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x]
     name: coverage
     steps:
     - uses: actions/checkout@master
@@ -70,6 +73,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           run: npm install
     - run: npm run coverage --covDir=/home/runner/work/_temp
-    - run: cd $RUNNER_TEMP && ls
+    - run: cd /home/runner/work/_temp && ls
     
     
