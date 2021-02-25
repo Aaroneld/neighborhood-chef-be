@@ -86,7 +86,7 @@ jobs:
     - run: npm run coverage-ci
     - run: pwd
     - run: ls -al
-    - run: sudo /home/runner/work/neighborhood-chef-be/neighborhood-chef-be/cc-test-reporter format-coverage -t lcov /home/runner/work/_temp/coverage/lcov.info
+#     - run: sudo /home/runner/work/neighborhood-chef-be/neighborhood-chef-be/cc-test-reporter format-coverage -t lcov /home/runner/work/_temp/coverage/lcov.info
     - run: /home/runner/work/neighborhood-chef-be/neighborhood-chef-be/cc-test-reporter upload-coverage 
 
     
