@@ -73,7 +73,7 @@ jobs:
       with:
           node-version: ${{ matrix.node-version }}
           run: npm install
-    - run: npm run coverage
+    - run: npm run coverage-ci
     - run: cd  /home/runner/work/_temp && touch temp.test
     - run: cd /home/runner/work/_temp && ls -al
     
