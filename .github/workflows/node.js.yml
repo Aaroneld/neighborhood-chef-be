@@ -84,6 +84,8 @@ jobs:
     - run: npm run migrate 
     - run: npm run seed
     - run: npm run coverage-ci
+    - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-0.7.0-linux-amd64 > ./cc-test-reporter
+    - run: ls 
     - run: cd  /home/runner/work/_temp && touch temp.test
     - run: cd /home/runner/work/_temp && ls -al
     
