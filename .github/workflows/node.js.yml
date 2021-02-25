@@ -93,7 +93,7 @@ jobs:
         CC_TEST_REPORTER_ID: 12a500dc24c9e35c38e5ae3f65265f29d8f53f19360024642fb4caf970159fd6
       with:
         coverageLocations: |
-          ${{runner.temp}}/icov.info
+          ${{runner.temp}}/lcov.info:lcov
     
     
     
