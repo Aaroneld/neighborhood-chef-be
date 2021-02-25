@@ -15,52 +15,53 @@ env:
   POSTGRES_PORT: 5432
   POSTGRES_DATABASE: NHC-test
   POSTGRES_CONNECTION_STRING: postgresql://dev:dev@localhost:5432/nhc-test
+  COVERAGE_LOCATION: /home/runner/work/_temp
+  CC_TEST_REPORTER_ID: 12a500dc24c9e35c38e5ae3f65265f29d8f53f19360024642fb4caf970159fd6
 
 jobs:
-  test:     
-    strategy:
-      matrix:
-        node-version: [10.x]
-          # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    runs-on: ubuntu-latest
-    steps:
-      # checkout branch
-      - name: Checkout 
-        uses: actions/checkout@v1
-  #     #set up caching 
-  #     - name: Get npm cache
-  #       id: npm-cache
-  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+#   test:     
+#     strategy:
+#       matrix:
+#         node-version: [10.x]
+#           # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+#     runs-on: ubuntu-latest
+#     steps:
+#       # checkout branch
+#       - name: Checkout 
+#         uses: actions/checkout@v1
+#   #     #set up caching 
+#   #     - name: Get npm cache
+#   #       id: npm-cache
+#   #       run: echo "::set-output name=dir::$(yarn cache dir)"
 
-  #     - uses: actions/cache@v1
-  #       with:
-  #         path: ${{ steps.yarn-npm.outputs.dir }}
-  #         key: ${{ runner.os }}-npm-${{ hashFiles('**/npm.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-yarn-
+#   #     - uses: actions/cache@v1
+#   #       with:
+#   #         path: ${{ steps.yarn-npm.outputs.dir }}
+#   #         key: ${{ runner.os }}-npm-${{ hashFiles('**/npm.lock') }}
+#   #         restore-keys: |
+#   #           ${{ runner.os }}-yarn-
 
-  #     - uses: actions/checkout@v2
+#   #     - uses: actions/checkout@v2
 
-       #set up node 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-          run: npm install
+#        #set up node 
+#       - name: Use Node.js ${{ matrix.node-version }}
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: ${{ matrix.node-version }}
+#           run: npm install
 
-      - name: Setup PostgreSQL
-        uses: harmon758/postgresql-action@v1.0.0
-        with:
-          postgresql version: 11
-          postgresql db: nhc-test
-          postgresql user: dev
-          postgresql password: dev
-      - run: npm ci
-      - run: npm run migrate 
-      - run: npm run seed
-      - run: npm test
+#       - name: Setup PostgreSQL
+#         uses: harmon758/postgresql-action@v1.0.0
+#         with:
+#           postgresql version: 11
+#           postgresql db: nhc-test
+#           postgresql user: dev
+#           postgresql password: dev
+#       - run: npm ci
+#       - run: npm run migrate 
+#       - run: npm run seed
+#       - run: npm test
   coverage:
-    needs: [test]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -72,8 +73,22 @@ jobs:
       with:
           node-version: ${{ matrix.node-version }}
           run: npm install
-    - run: npm run coverage --covDir=/home/runner/work/_temp
-    - run: cd  /home/runner/work/_temp && touch temp.test
+    - name: Setup PostgreSQL
+      uses: harmon758/postgresql-action@v1.0.0
+      with:
+          postgresql version: 11
+          postgresql db: nhc-test
+          postgresql user: dev
+          postgresql password: dev
+    - run: npm ci
+    - run: npm run migrate 
+    - run: npm run seed
+    - run: npm run coverage-ci
+    - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-0.7.0-linux-amd64 > /home/runner/work/_temp/cc-test-reporter
     - run: cd /home/runner/work/_temp && ls -al
+    - run: sudo /home/runner/work/_temp/cc-test-reporter format-coverage -t lcov /home/runner/work/_temp/coverage/lcov.info
+    - run: /home/runner/work/_temp/cc-test-reporter upload-coverage 
+
+    
     
     
