@@ -84,10 +84,9 @@ jobs:
     - run: npm run migrate 
     - run: npm run seed
     - run: npm run coverage-ci
-    - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-0.7.0-linux-amd64 > /home/runner/work/_temp/cc-test-reporter
     - run: cd /home/runner/work/_temp && ls -al
-    - run: sudo /home/runner/work/_temp/cc-test-reporter format-coverage -t lcov /home/runner/work/_temp/coverage/lcov.info
-    - run: /home/runner/work/_temp/cc-test-reporter upload-coverage 
+    - run: sudo ./cc-test-reporter format-coverage -t lcov /home/runner/work/_temp/coverage/lcov.info
+    - run: ./cc-test-reporter upload-coverage 
 
     
     
