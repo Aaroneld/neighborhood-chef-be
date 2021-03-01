@@ -143,6 +143,8 @@ const typeDefs = gql`
         Users(queryParams: UserInput): [User]! 
         Events(queryParams: EventInput): [Event]!
         EventStatuses(queryParams: EventStatusInput): [EventStatus]!
+        FavoriteEvents(queryParams: FavoriteEventInput): [FavoriteEvents]!
+        Comments(queryParams: CommentInput): [Comment]!
     }
 
     type Mutation {
