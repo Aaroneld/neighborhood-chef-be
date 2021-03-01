@@ -3,6 +3,13 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
     scalar JSON
 
+    type UserEvents {
+        owned: [Event]!
+        attending: [Event]!
+        invited: [Event]!
+        favorited: [Event]!
+    }
+
     type User {
         id: ID!
         email: String!
@@ -14,11 +21,12 @@ const typeDefs = gql`
         longitude: Float!
         photo: String
         status: String
-        eventsOwned: [Event]!
-        favoriteEvents: [Event]!
+        events: UserEvents
     }
 
-    input NewUserInput {
+
+
+    input UserInput {
         id: ID
         email: String!
         firstName: String!
@@ -30,43 +38,27 @@ const typeDefs = gql`
         photo: String
     }
 
-    input UpdateUserInput {
-        id: ID
-        email: String
-        firstName: String
-        lastName: String
-        gender: String
-        address: String
-        latitude: Float
-        longitude: Float
-        photo: String
-    }
-
-    input UserEmailInput {
-        email: String!
-    }
-
     type Event {
-        id: ID!
+        id: ID
+        createDateTime: String
         startTime: String!
         endTime: String
-        createDateTime: String!
         title: String!
         description: String!
+        owner: User!
         photo: String
-        category_id: Int!
-        user_id: Int!
-        modifiers: JSON
-        hashtags: JSON
-        dietaryWarnings: JSON
-        allergenWarnings: JSON
+        category: String
+        modifiers: [String]
+        hashtags: [String]
+        dietaryWarnings: [String]
+        allergenWarnings: [String]
         address: String!
         latitude: Float!
         longitude: Float!
-        users: [User!]
+        comments: [Comment]!
     }
 
-    input NewEventInput {
+    input EventInput {
         id: ID
         createDateTime: String
         startTime: String!
@@ -75,42 +67,14 @@ const typeDefs = gql`
         description: String!
         user_id: Int!
         photo: String
-        category_id: Int!
-        modifiers: JSON
-        hashtags: JSON
-        dietaryWarnings: JSON
-        allergenWarnings: JSON
+        category: String
+        modifiers: [String]
+        hashtags: [String]
+        dietaryWarnings: [String]
+        allergenWarnings: [String]
         address: String!
         latitude: Float!
         longitude: Float!
-    }
-
-    input UpdateEventInput {
-        id: ID
-        startTime: String
-        endTime: String
-        title: String
-        description: String
-        photo: String
-        category_id: Int
-        user_id: Int
-        modifiers: JSON
-        hashtags: JSON
-        dietaryWarnings: JSON
-        allergenWarnings: JSON
-        address: String
-        latitude: Float
-        longitude: Float
-    }
-
-    type Category {
-        id: ID!
-        category: String!
-    }
-
-    input NewCategoryInput {
-        id: ID
-        category: String!
     }
 
     input EventInviteInput {
@@ -120,18 +84,12 @@ const typeDefs = gql`
         status: String!
     }
 
-    input UpdateInviteInput {
-        event_id: Int!
-        user_id: Int!
-        status: String!
-    }
-
     input RemoveInviteInput {
         event_id: Int!
         user_id: Int!
     }
 
-    input NewFavoriteEventInput {
+    input FavoriteEventInput {
         event_id: Int!
         user_id: Int!
     }
@@ -149,10 +107,11 @@ const typeDefs = gql`
         root_id: Int!
         dateCreated: String!
         comment: String!
+        Reactions [Reaction]
         user: User!
     }
 
-    input NewCommentInput {
+    input CommentInput {
         id: ID
         event_id: Int!
         user_id: Int!
@@ -160,16 +119,6 @@ const typeDefs = gql`
         root_id: Int!
         dateCreated: String!
         comment: String!
-    }
-
-    input UpdateCommentInput {
-        id: ID
-        event_id: Int
-        user_id: Int
-        parent_id: Int
-        root_id: Int
-        dateCreated: String
-        comment: String
     }
 
     type Reaction {
@@ -186,39 +135,23 @@ const typeDefs = gql`
 
     type Query {
         status: String!
-        getAllUsers: [User]!
-        getUserById(id: ID!): User!
-        getUserByEmail(input: UserEmailInput!): User!
-        getAuthoredEvents(id: ID!): [Event]!
-        getUninvitedUsers(id: ID!): [User]!
-        getInvitedEvents(id: ID!): [Event]!
-        getAttendingEvents(id: ID!): [Event]!
-        getAllEvents: [Event]!
-        getEventById(id: ID!): Event!
-        getCategories: [Category]!
-        getCategoryById(id: ID!): Category!
-        getFavoriteEvents(id: ID!): [Event]!
-        getEventComments(id: ID!): [Comment]!
-        getCommentReactions(id: ID!): [Reaction]!
+        Users: [User]! 
+        Events: [Event]!
+    }
+
+    enum Status {
+        Not Approved 
+        Approved
+        Not Going
+        Maybe Going
+        Going
     }
 
     type Mutation {
-        addUser(input: NewUserInput!): User!
-        updateUser(id: ID!, input: UpdateUserInput!): User!
+        inputUser(input: UserInput!): User!
         removeUser(id: ID!): User!
-        addEvent(input: NewEventInput!): Event!
-        updateEvent(id: ID!, input: UpdateEventInput!): Event!
+        inputEvent(input: EventInput!): Event!
         removeEvent(id: ID!): Event!
-        addCategory(input: NewCategoryInput!): Category!
-        inviteUserToEvent(input: EventInviteInput!): Event!
-        updateInvitation(input: UpdateInviteInput!): Event!
-        removeInvitation(input: RemoveInviteInput!): Event!
-        addFavoriteEvent(input: NewFavoriteEventInput!): [Event]!
-        removeFavoriteEvent(input: RemoveFavoriteEventInput!): [Event]!
-        addComment(input: NewCommentInput!): Comment!
-        updateComment(id: ID!, input: UpdateCommentInput!): Comment!
-        removeComment(id: ID!): Comment!
-        handleReaction(input: ReactionInput!): [Reaction]!
     }
 `;
 
