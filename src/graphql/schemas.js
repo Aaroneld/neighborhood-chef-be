@@ -26,14 +26,15 @@ const typeDefs = gql`
 
     input UserInput {
         id: ID
-        email: String!
-        firstName: String!
-        lastName: String!
+        email: String
+        firstName: String
+        lastName: String
         gender: String
-        address: String!
-        latitude: Float!
-        longitude: Float!
+        address: String
+        latitude: Float
+        longitude: Float
         photo: String
+        activated: Bool
     }
 
     type Event {
@@ -59,20 +60,20 @@ const typeDefs = gql`
     input EventInput {
         id: ID
         createDateTime: String
-        startTime: String!
+        startTime: String
         endTime: String
-        title: String!
-        description: String!
-        user_id: Int!
+        title: String
+        description: String
+        user_id: Int
         photo: String
         category: String
         modifiers: [String]
         hashtags: [String]
         dietaryWarnings: [String]
         allergenWarnings: [String]
-        address: String!
-        latitude: Float!
-        longitude: Float!
+        address: String
+        latitude: Float
+        longitude: Float
     }
 
     input FavoriteEventInput {
@@ -94,12 +95,12 @@ const typeDefs = gql`
 
     input CommentInput {
         id: ID
-        event_id: Int!
-        user_id: Int!
-        parent_id: Int!
-        root_id: Int!
-        dateCreated: String!
-        comment: String!
+        event_id: Int
+        user_id: Int
+        parent_id: Int
+        root_id: Int
+        dateCreated: String
+        comment: String
     }
 
     type Reaction {
@@ -109,9 +110,9 @@ const typeDefs = gql`
     }
 
     input ReactionInput {
-        comment_id: Int!
-        user_id: Int!
-        reaction: String!
+        comment_id: Int
+        user_id: Int
+        reaction: String
     }
 
     enum Status {
@@ -123,25 +124,25 @@ const typeDefs = gql`
     }
 
     type EventStatus {
-        id: ID!
+        event_d: Event! 
         status: Status!
-        inviter: User!
-        invitee: User!
+        inviter_id: User!
+        user_id: User!
     }
 
-    input EventStatus {
-        id: ID!
+    input EventStatusInput {
+        event_id: int!
         status: Status!
-        inviter: Int!
-        invitee: Int!
+        inviter_id: Int!
+        user_id: Int!
     }
 
 
     type Query {
         status: String!
-        Users: [User]! 
-        Events: [Event]!
-        EventStatuses: [EventStatus]!
+        Users(queryParams: UserInput): [User]! 
+        Events(queryParams: EventInput): [Event]!
+        EventStatuses(queryParams: EventStatusInput): [EventStatus]!
     }
 
     type Mutation {
@@ -149,6 +150,14 @@ const typeDefs = gql`
         removeUser(id: ID!): User!
         inputEvent(input: EventInput!): Event!
         removeEvent(id: ID!): Event!
+        inputEventStatus(eventStatus: EventStatusInput)
+        removeEventStatus(event: Int! invitee: int!)
+        inputComment(comment: CommentInput)
+        removeComment(id: ID!)
+        inputReaction(reaction: ReactionInput)
+        removeReaction(id: ID!)
+        favoriteEventInput(favoriteEvent: favoriteEventInput)
+        removeFavoriteEvent(user: Int! event: Int!)
     }
 `;
 
