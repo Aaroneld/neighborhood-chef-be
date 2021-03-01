@@ -24,8 +24,6 @@ const typeDefs = gql`
         events: UserEvents
     }
 
-
-
     input UserInput {
         id: ID
         email: String!
@@ -77,24 +75,7 @@ const typeDefs = gql`
         longitude: Float!
     }
 
-    input EventInviteInput {
-        event_id: Int!
-        user_id: Int!
-        inviter_id: Int!
-        status: String!
-    }
-
-    input RemoveInviteInput {
-        event_id: Int!
-        user_id: Int!
-    }
-
     input FavoriteEventInput {
-        event_id: Int!
-        user_id: Int!
-    }
-
-    input RemoveFavoriteEventInput {
         event_id: Int!
         user_id: Int!
     }
@@ -133,18 +114,34 @@ const typeDefs = gql`
         reaction: String!
     }
 
-    type Query {
-        status: String!
-        Users: [User]! 
-        Events: [Event]!
-    }
-
     enum Status {
         Not Approved 
         Approved
         Not Going
         Maybe Going
         Going
+    }
+
+    type EventStatus {
+        id: ID!
+        status: Status!
+        inviter: User!
+        invitee: User!
+    }
+
+    input EventStatus {
+        id: ID!
+        status: Status!
+        inviter: Int!
+        invitee: Int!
+    }
+
+
+    type Query {
+        status: String!
+        Users: [User]! 
+        Events: [Event]!
+        EventStatuses: [EventStatus]!
     }
 
     type Mutation {
