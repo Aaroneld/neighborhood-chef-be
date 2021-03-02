@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-express');
+const gql = require('graphql-tag');
 
 const typeDefs = gql`
     scalar JSON
@@ -21,7 +21,7 @@ const typeDefs = gql`
         longitude: Float!
         photo: String
         status: String
-        events: UserEvents
+        UserEvents: UserEvents
     }
 
     input UserInput {
@@ -34,7 +34,7 @@ const typeDefs = gql`
         latitude: Float
         longitude: Float
         photo: String
-        activated: Bool
+        activated: Boolean
     }
 
     type Event {
@@ -44,7 +44,7 @@ const typeDefs = gql`
         endTime: String
         title: String!
         description: String!
-        owner: User!
+        User: User!
         photo: String
         category: String
         modifiers: [String]
@@ -54,7 +54,13 @@ const typeDefs = gql`
         address: String!
         latitude: Float!
         longitude: Float!
-        comments: [Comment]!
+        Comments: [Comment]!
+        EventUsers: EventUsers!
+    }
+
+    type EventUsers {
+        attending: [User]!
+        invited: [User]!
     }
 
     input EventInput {
@@ -89,8 +95,8 @@ const typeDefs = gql`
         root_id: Int!
         dateCreated: String!
         comment: String!
-        Reactions [Reaction]
-        user: User!
+        Reactions: [Reaction]
+        User: User!
     }
 
     input CommentInput {
@@ -116,35 +122,34 @@ const typeDefs = gql`
     }
 
     enum Status {
-        Not Approved 
+        Not_Approved
         Approved
-        Not Going
-        Maybe Going
+        Not_Going
+        Maybe_Going
         Going
     }
 
     type EventStatus {
-        event_d: Event! 
+        event_d: Event!
         status: Status!
         inviter_id: User!
         user_id: User!
     }
 
     input EventStatusInput {
-        event_id: int!
+        event_id: Int!
         status: Status!
         inviter_id: Int!
         user_id: Int!
     }
 
-
     type Query {
-        status: String!
-        Users(queryParams: UserInput): [User]! 
+        Status: String!
+        Users(queryParams: UserInput): [User]!
         Events(queryParams: EventInput): [Event]!
-        EventStatuses(queryParams: EventStatusInput): [EventStatus]!
-        FavoriteEvents(queryParams: FavoriteEventInput): [FavoriteEvents]!
-        Comments(queryParams: CommentInput): [Comment]!
+        # EventStatuses(queryParams: EventStatusInput): [EventStatus]!
+        # FavoriteEvents(queryParams: FavoriteEventInput): [Event]!
+        # Comments(queryParams: CommentInput): [Comment]!
     }
 
     type Mutation {
@@ -152,14 +157,14 @@ const typeDefs = gql`
         removeUser(id: ID!): User!
         inputEvent(input: EventInput!): Event!
         removeEvent(id: ID!): Event!
-        inputEventStatus(eventStatus: EventStatusInput)
-        removeEventStatus(event: Int! invitee: int!)
-        inputComment(comment: CommentInput)
-        removeComment(id: ID!)
-        inputReaction(reaction: ReactionInput)
-        removeReaction(id: ID!)
-        favoriteEventInput(favoriteEvent: favoriteEventInput)
-        removeFavoriteEvent(user: Int! event: Int!)
+        inputEventStatus(eventStatus: EventStatusInput): Boolean
+        removeEventStatus(event: Int!, invitee: Int!): Boolean
+        inputComment(comment: CommentInput): Boolean
+        removeComment(id: ID!): Boolean
+        inputReaction(reaction: ReactionInput): Boolean
+        removeReaction(id: ID!): Boolean
+        favoriteEventInput(favoriteEvent: FavoriteEventInput): Boolean
+        removeFavoriteEvent(user: Int!, event: Int!): Boolean
     }
 `;
 

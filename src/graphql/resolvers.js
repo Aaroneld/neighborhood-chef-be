@@ -1,83 +1,105 @@
-const { GraphQLJSON } = require('graphql-type-json');
+const { users, events, comments, commentReactions } = require('../models');
 
-const {
-    status,
-    getAllUsers,
-    getUserById,
-    getUserByEmail,
-    getAuthoredEvents,
-    getInvitedEvents,
-    getAttendingEvents,
-    addUser,
-    updateUser,
-    removeUser,
-    addFavoriteEvent,
-    removeFavoriteEvent,
-    getFavoriteEvents,
-} = require('../resolvers/users/user-resolvers.js');
-
-const {
-    getAllEvents,
-    getEventById,
-    addEvent,
-    updateEvent,
-    removeEvent,
-    getUninvitedUsers,
-    inviteUserToEvent,
-    updateInvitation,
-    removeInvitation,
-} = require('../resolvers/events/event-resolvers.js');
-
-const {
-    getCategories,
-    getCategoryById,
-    addCategory,
-} = require('../resolvers/categories/category-resolvers.js');
-
-const {
-    getEventComments,
-    addComment,
-    updateComment,
-    removeComment,
-    handleReaction,
-    getCommentReactions,
-} = require('../resolvers/comments/comment-resolvers.js');
-
-module.exports = {
-    JSON: GraphQLJSON,
+const resolvers = {
     Query: {
-        status,
-        getAllUsers,
-        getUserById,
-        getUserByEmail,
-        getUninvitedUsers,
-        getAuthoredEvents,
-        getInvitedEvents,
-        getAttendingEvents,
-        getAllEvents,
-        getEventById,
-        getCategories,
-        getCategoryById,
-        getFavoriteEvents,
-        getEventComments,
-        getCommentReactions,
+        Status: () => 'OK!',
+        Users: async (obj, args) => {
+            if (args.queryParams) {
+                return await users.findBy(args.queryParams);
+            }
+            return await users.find();
+        },
+        Events: async (obj, args) => {
+            if (args.queryParams) {
+                return await events.findBy(args.queryParams);
+            }
+            return await events.find();
+        },
     },
-    Mutation: {
-        addUser,
-        updateUser,
-        removeUser,
-        addEvent,
-        updateEvent,
-        removeEvent,
-        addCategory,
-        inviteUserToEvent,
-        updateInvitation,
-        removeInvitation,
-        addFavoriteEvent,
-        removeFavoriteEvent,
-        addComment,
-        updateComment,
-        removeComment,
-        handleReaction,
+    Event: {
+        User: async (obj, args) => {
+            if (obj.user_id) {
+                return await users.findById(obj.user_id);
+            } else {
+                throw new Error('User id required!');
+            }
+        },
+        Comments: async (obj, args) => {
+            if (obj.id) {
+                return comments.findAllEventComments(obj.id);
+            } else {
+                throw new Error('Event id required!');
+            }
+        },
+        EventUsers: (obj) => obj,
+    },
+    User: {
+        UserEvents: async (obj, args) => {
+            return obj;
+        },
+    },
+    EventUsers: {
+        attending: async (obj, args) => {
+            if (obj.id) {
+                return await events.findAttendingUsersForEvent(obj.id);
+            } else {
+                throw new Error('No event id given');
+            }
+        },
+        invited: async (obj, args) => {
+            if (obj.id) {
+                await events.findInvitedUsersForEvent(obj.id);
+            } else {
+                throw new Error('No event id given');
+            }
+        },
+    },
+    UserEvents: {
+        owned: async (obj, args) => {
+            if (obj.id) {
+                return await events.findBy({ user_id: obj.id });
+            } else {
+                throw new Error('No user id given');
+            }
+        },
+        attending: async (obj, args) => {
+            if (obj.id) {
+                return await events.findAttendingEvents(obj.id);
+            } else {
+                throw new Error('No user id given');
+            }
+        },
+        invited: async (obj, args) => {
+            if (obj.id) {
+                return await events.findInvitedEvents(obj.id);
+            } else {
+                throw new Error('No user id given');
+            }
+        },
+        favorited: async (obj, args) => {
+            if (obj.id) {
+                return await users.findAllFavoriteEvents(obj.id);
+            } else {
+                throw new Error('No user id given');
+            }
+        },
+    },
+    Comment: {
+        User: async (obj, args) => {
+            if (obj.user_id) {
+                return await users.findById(obj.user_id);
+            } else {
+                throw new Error('No user id given');
+            }
+        },
+        Reactions: async (obj, args) => {
+            if (obj.id) {
+                return await commentReactions.findAllCommentReactions(obj.id);
+            } else {
+                throw new Error('No comment id given');
+            }
+        },
     },
 };
+
+module.exports = resolvers;
