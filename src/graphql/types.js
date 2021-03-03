@@ -157,7 +157,7 @@ const typeDefs = gql`
         removeEvent(id: ID!): Event!
         inputEventStatus(eventStatus: EventStatusInput): Event!
         removeEventStatus(event_id: Int!, user_id: Int!): EventStatus!
-        inputComment(comment: CommentInput): Comment!
+        inputComment(comment: CommentInput!): Comment!
         removeComment(id: ID!): Comment!
         handleReaction(reaction: ReactionInput!): [Reaction!]
         favoriteEventInput(favoriteEvent: FavoriteEventInput!): Event!

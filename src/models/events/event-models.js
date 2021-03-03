@@ -134,13 +134,20 @@ function findInvitedEvents(id) {
     return db('Events')
         .select('Events.*')
         .join('Events_Status', 'Events_Status.event_id', 'Events.id')
-        .where('Events_Status.user_id', id);
+        .whereNot('Events.user_id', id)
+        .where('Events_Status.user_id', id)
+        .whereIn('Events_Status.status', [
+            'Maybe Going',
+            'Approved',
+            'Not Approved',
+        ]);
 }
 
 function findAttendingEvents(id) {
     return db('Events')
         .select('Events.*')
         .join('Events_Status', 'Events_Status.event_id', 'Events.id')
+        .whereNot('Events.user_id', id)
         .where('Events_Status.user_id', id)
         .andWhere('Events_Status.status', 'Going');
 }

@@ -22,14 +22,14 @@ const resolvers = {
             if (obj.user_id) {
                 return await users.findById(obj.user_id);
             } else {
-                throw new Error('User id required!');
+                throw new Error(`User id ${obj.user_id} not found`);
             }
         },
         Comments: async (obj, args) => {
             if (obj.id) {
                 return comments.findAllEventComments(obj.id);
             } else {
-                throw new Error('Event id required!');
+                throw new Error(`Event id ${obj.id} not found`);
             }
         },
         EventUsers: (obj) => obj,
@@ -42,14 +42,14 @@ const resolvers = {
             if (obj.id) {
                 return await events.findAttendingUsersForEvent(obj.id);
             } else {
-                throw new Error('No event id given');
+                throw new Error(`Event id ${obj.id} not found`);
             }
         },
         invited: async (obj, args) => {
             if (obj.id) {
                 await events.findInvitedUsersForEvent(obj.id);
             } else {
-                throw new Error('No event id given');
+                throw new Error(`Event id ${obj.id} not found`);
             }
         },
     },
@@ -58,28 +58,28 @@ const resolvers = {
             if (obj.id) {
                 return await events.findBy({ user_id: obj.id });
             } else {
-                throw new Error('No user id given');
+                throw new Error(`User id ${obj.id} not found`);
             }
         },
         attending: async (obj, args) => {
             if (obj.id) {
                 return await events.findAttendingEvents(obj.id);
             } else {
-                throw new Error('No user id given');
+                throw new Error(`User id ${obj.id} not found`);
             }
         },
         invited: async (obj, args) => {
             if (obj.id) {
                 return await events.findInvitedEvents(obj.id);
             } else {
-                throw new Error('No user id given');
+                throw new Error(`User id ${obj.id} not found`);
             }
         },
         favorited: async (obj, args) => {
             if (obj.id) {
                 return await users.findAllFavoriteEvents(obj.id);
             } else {
-                throw new Error('No user id given');
+                throw new Error(`User id ${obj.id} not found`);
             }
         },
     },
@@ -88,14 +88,14 @@ const resolvers = {
             if (obj.user_id) {
                 return await users.findById(obj.user_id);
             } else {
-                throw new Error('No user id given');
+                throw new Error(`User id ${obj.user_id} not found`);
             }
         },
         Reactions: async (obj, args) => {
             if (obj.id) {
                 return await commentReactions.findAllCommentReactions(obj.id);
             } else {
-                throw new Error('No comment id given');
+                throw new Error(`Comment id ${obj.id} not found`);
             }
         },
     },
@@ -191,7 +191,6 @@ const resolvers = {
                 } else {
                     id = await events.inviteUserToEvent(args.eventStatus);
                 }
-
                 id = id.id;
 
                 return { id };
@@ -242,6 +241,7 @@ const resolvers = {
                         id = await comments.add(args.comment); // else add new comment
                     }
                     id = id.id;
+
                     return { id };
                 } else {
                     throw new Error(
@@ -271,11 +271,15 @@ const resolvers = {
 
             if (!reaction) {
                 return await commentReactions.add(args.reaction); // add a new reaction
-            }
-            if (reaction && args.reaction.reaction === reaction.reaction) {
+            } else if (
+                reaction &&
+                args.reaction.reaction === reaction.reaction
+            ) {
                 return await commentReactions.remove(args.reaction); // remove reaction
-            }
-            if (reaction && args.reaction.reaction !== reaction.reaction) {
+            } else if (
+                reaction &&
+                args.reaction.reaction !== reaction.reaction
+            ) {
                 return await commentReactions.update(args.reaction); // update reaction
             }
         },
@@ -313,9 +317,10 @@ const resolvers = {
                     )
                 ) {
                     await users.removeFavoriteEvent(args.event, args.user);
+
                     return { id: args.event };
                 } else {
-                    throw new Error(`Event with id ${args.id} not found`);
+                    throw new Error(`Event with id ${args.event} not found`);
                 }
             } catch (err) {
                 return err;
