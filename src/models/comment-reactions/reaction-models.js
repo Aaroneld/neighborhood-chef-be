@@ -15,7 +15,8 @@ function findAllCommentReactions(id) {
 function findBy(reaction) {
     return db('Comment_Reactions')
         .where('comment_id', reaction.comment_id)
-        .andWhere('user_id', reaction.user_id);
+        .andWhere('user_id', reaction.user_id)
+        .first();
 }
 
 async function add(input) {

@@ -267,18 +267,16 @@ const resolvers = {
             }
         },
         handleReaction: async (obj, args) => {
-            const reaction = await commentReactions
-                .findBy(args.reaction)
-                .first();
+            const reaction = await commentReactions.findBy(args.reaction);
 
             if (!reaction) {
-                return await commentReactions.add(args.reaction);
+                return await commentReactions.add(args.reaction); // add a new reaction
             }
             if (reaction && args.reaction.reaction === reaction.reaction) {
-                return await commentReactions.remove(args.reaction);
+                return await commentReactions.remove(args.reaction); // remove reaction
             }
             if (reaction && args.reaction.reaction !== reaction.reaction) {
-                return await commentReactions.update(args.reaction);
+                return await commentReactions.update(args.reaction); // update reaction
             }
         },
         favoriteEventInput: async (obj, args) => {
