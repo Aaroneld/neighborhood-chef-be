@@ -51,15 +51,15 @@ function findIfAlreadyFavorite(favorite) {
 }
 
 async function addFavoriteEvent(favoriteEvent) {
-    const newFavorite = await db('User_Favorite_Events').insert(favoriteEvent);
+    await db('User_Favorite_Events').insert(favoriteEvent);
 
-    return await findAllFavoriteEvents(favoriteEvent.user_id);
+    return findIfAlreadyFavorite(favoriteEvent);
 }
 
-function removeFavoriteEvent(favoriteEvent) {
+function removeFavoriteEvent(event_id, user_id) {
     return db('User_Favorite_Events')
-        .where('User_Favorite_Events.event_id', favoriteEvent.event_id)
-        .andWhere('User_Favorite_Events.user_id', favoriteEvent.user_id)
+        .where('User_Favorite_Events.event_id', event_id)
+        .andWhere('User_Favorite_Events.user_id', user_id)
         .del();
 }
 

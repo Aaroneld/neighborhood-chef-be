@@ -148,9 +148,6 @@ const typeDefs = gql`
         Status: String!
         Users(queryParams: UserInput): [User]!
         Events(queryParams: EventInput): [Event]!
-        # EventStatuses(queryParams: EventStatusInput): [EventStatus]!
-        # FavoriteEvents(queryParams: FavoriteEventInput): [Event]!
-        # Comments(queryParams: CommentInput): [Comment]!
     }
 
     type Mutation {
@@ -160,12 +157,11 @@ const typeDefs = gql`
         removeEvent(id: ID!): Event!
         inputEventStatus(eventStatus: EventStatusInput): Event!
         removeEventStatus(event_id: Int!, user_id: Int!): EventStatus!
-        inputComment(comment: CommentInput): Boolean
-        removeComment(id: ID!): Boolean
-        inputReaction(reaction: ReactionInput): Boolean
-        removeReaction(id: ID!): Boolean
-        favoriteEventInput(favoriteEvent: FavoriteEventInput): Boolean
-        removeFavoriteEvent(user: Int!, event: Int!): Boolean
+        inputComment(comment: CommentInput): Comment!
+        removeComment(id: ID!): Comment!
+        handleReaction(reaction: ReactionInput!): [Reaction!]
+        favoriteEventInput(favoriteEvent: FavoriteEventInput!): Event!
+        removeFavoriteEvent(user: Int!, event: Int!): Event!
     }
 `;
 

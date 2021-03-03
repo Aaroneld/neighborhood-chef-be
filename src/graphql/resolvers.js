@@ -215,6 +215,114 @@ const resolvers = {
                 return err;
             }
         },
+        inputComment: async (obj, args) => {
+            try {
+                let id = null;
+
+                if (
+                    await checkIfExists({ id: args.comment.event_id }, 'Events') // check if event exists
+                ) {
+                    if (args.comment.id) {
+                        if (
+                            await checkIfExists(
+                                { id: args.comment.id },
+                                'Comments'
+                            ) // check if comment exists
+                        ) {
+                            id = await comments.update(
+                                args.comment.id,
+                                args.comment
+                            );
+                        } else {
+                            throw new Error(
+                                `Comment with id ${args.comment.id} not found`
+                            );
+                        }
+                    } else {
+                        id = await comments.add(args.comment); // else add new comment
+                    }
+                    id = id.id;
+                    return { id };
+                } else {
+                    throw new Error(
+                        `Event with id ${args.comment.event_id} not found`
+                    );
+                }
+            } catch (err) {
+                console.log(err);
+                return err;
+            }
+        },
+        removeComment: async (obj, args) => {
+            try {
+                if (await checkIfExists({ id: args.id }, 'Comments')) {
+                    await comments.remove(args.id);
+                    return { id: args.id };
+                } else {
+                    throw new Error(`Comment with id ${args.id} not found`);
+                }
+            } catch (err) {
+                console.log(err);
+                return err;
+            }
+        },
+        handleReaction: async (obj, args) => {
+            const reaction = await commentReactions
+                .findBy(args.reaction)
+                .first();
+
+            if (!reaction) {
+                return await commentReactions.add(args.reaction);
+            }
+            if (reaction && args.reaction.reaction === reaction.reaction) {
+                return await commentReactions.remove(args.reaction);
+            }
+            if (reaction && args.reaction.reaction !== reaction.reaction) {
+                return await commentReactions.update(args.reaction);
+            }
+        },
+        favoriteEventInput: async (obj, args) => {
+            try {
+                if (
+                    await checkIfExists(
+                        {
+                            event_id: args.favoriteEvent.event_id,
+                            user_id: args.favoriteEvent.user_id,
+                        },
+                        'User_Favorite_Events'
+                    )
+                ) {
+                    throw new Error(
+                        `Event with id ${args.favoriteEvent.event_id} already favorite event`
+                    );
+                } else {
+                    await users.addFavoriteEvent(args.favoriteEvent);
+                    return { id: args.favoriteEvent.event_id };
+                }
+            } catch (err) {
+                return err;
+            }
+        },
+        removeFavoriteEvent: async (obj, args) => {
+            try {
+                if (
+                    await checkIfExists(
+                        {
+                            event_id: args.event,
+                            user_id: args.user,
+                        },
+                        'User_Favorite_Events'
+                    )
+                ) {
+                    await users.removeFavoriteEvent(args.event, args.user);
+                    return { id: args.event };
+                } else {
+                    throw new Error(`Event with id ${args.id} not found`);
+                }
+            } catch (err) {
+                return err;
+            }
+        },
     },
 };
 
