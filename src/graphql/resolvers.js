@@ -1,106 +1,128 @@
 const { users, events, comments, commentReactions } = require('../models');
-const { checkIfExists } = require('./utilities');
+const { checkIfExists, sendErrorRedirect } = require('./utilities');
 
 const resolvers = {
     Query: {
         Status: () => 'OK!',
-        Users: async (obj, args) => {
-            if (args.queryParams) {
-                return await users.findBy(args.queryParams);
+        Users: async (_, args, ctx) => {
+            try {
+                if (args.queryParams) {
+                    return await users.findBy(args.queryParams);
+                }
+                return await users.find();
+            } catch (err) {
+                sendErrorRedirect(
+                    ctx.res,
+                    500,
+                    err,
+                    "Inside GQL 'Users' query"
+                );
             }
-            return await users.find();
         },
-        Events: async (obj, args) => {
-            if (args.queryParams) {
-                return await events.findBy(args.queryParams);
+        Events: async (_, args, ctx) => {
+            try {
+                if (args.queryParams) {
+                    return await events.findBy(args.queryParams);
+                }
+                return await events.find();
+            } catch (err) {
+                sendErrorRedirect(
+                    ctx.res,
+                    500,
+                    err,
+                    "Inside GQL 'Events' query"
+                );
             }
-            return await events.find();
         },
     },
     Event: {
-        User: async (obj, args) => {
+        User: async (obj, args, ctx) => {
             if (obj.user_id) {
                 return await users.findById(obj.user_id);
             } else {
-                throw new Error(`User id ${obj.user_id} not found`);
+                sendErrorRedirect(
+                    ctx.res,
+                    400,
+                    new Error(`User id is required`),
+                    'Inside GQL Event->User subquery'
+                );
             }
         },
-        Comments: async (obj, args) => {
+        Comments: async (obj, args, ctx) => {
             if (obj.id) {
                 return comments.findAllEventComments(obj.id);
             } else {
-                throw new Error(`Event id ${obj.id} not found`);
+                sendErrorRedirect(
+                    ctx.res,
+                    400,
+                    new Error(`Event id is required`),
+                    'Inside GQL Event->Comments subquery'
+                );
             }
         },
-        EventUsers: (obj) => obj,
+        EventUsers: (obj, args, ctx) => {
+            if (obj.id) return obj;
+            else
+                sendErrorRedirect(
+                    ctx.res,
+                    400,
+                    new Error(`Event id is required`),
+                    'Inside GQL Event->EventUsers subquery'
+                );
+        },
     },
     User: {
-        UserEvents: (obj) => obj,
+        UserEvents: (obj, args, ctx) => {
+            if (obj.id) return obj;
+            else
+                sendErrorRedirect(
+                    ctx.res,
+                    400,
+                    new Error(`User id is required`),
+                    'Inside GQL Event->UserEvents subquery'
+                );
+        },
     },
     EventUsers: {
-        attending: async (obj, args) => {
-            if (obj.id) {
-                return await events.findAttendingUsersForEvent(obj.id);
-            } else {
-                throw new Error(`Event id ${obj.id} not found`);
-            }
-        },
-        invited: async (obj, args) => {
-            if (obj.id) {
-                await events.findInvitedUsersForEvent(obj.id);
-            } else {
-                throw new Error(`Event id ${obj.id} not found`);
-            }
-        },
+        attending: async (obj) =>
+            await events.findAttendingUsersForEvent(obj.id),
+        invited: async (obj) => await events.findInvitedUsersForEvent(obj.id),
     },
     UserEvents: {
-        owned: async (obj, args) => {
-            if (obj.id) {
-                return await events.findBy({ user_id: obj.id });
-            } else {
-                throw new Error(`User id ${obj.id} not found`);
-            }
-        },
-        attending: async (obj, args) => {
-            if (obj.id) {
-                return await events.findAttendingEvents(obj.id);
-            } else {
-                throw new Error(`User id ${obj.id} not found`);
-            }
-        },
-        invited: async (obj, args) => {
-            if (obj.id) {
-                return await events.findInvitedEvents(obj.id);
-            } else {
-                throw new Error(`User id ${obj.id} not found`);
-            }
-        },
-        favorited: async (obj, args) => {
-            if (obj.id) {
-                return await users.findAllFavoriteEvents(obj.id);
-            } else {
-                throw new Error(`User id ${obj.id} not found`);
-            }
-        },
+        owned: async (obj) => await events.findBy({ user_id: obj.id }),
+        attending: async (obj) => await events.findAttendingEvents(obj.id),
+        invited: async (obj) => await events.findInvitedEvents(obj.id),
+        favorited: async (obj) => await users.findAllFavoriteEvents(obj.id),
     },
     Comment: {
-        User: async (obj, args) => {
+        User: async (obj, args, ctx) => {
             if (obj.user_id) {
                 return await users.findById(obj.user_id);
             } else {
-                throw new Error(`User id ${obj.user_id} not found`);
+                sendErrorRedirect(
+                    ctx.res,
+                    400,
+                    new Error(`User id is required`),
+                    'Inside GQL Event->Comments->Comment subquery'
+                );
             }
         },
-        Reactions: async (obj, args) => {
+        Reactions: async (obj, args, ctx) => {
             if (obj.id) {
                 return await commentReactions.findAllCommentReactions(obj.id);
             } else {
-                throw new Error(`Comment id ${obj.id} not found`);
+                sendErrorRedirect(
+                    ctx.res,
+                    400,
+                    new Error(`Comment id is required`),
+                    'Inside GQL Event->Comments->Comment->Reactions subquery'
+                );
             }
         },
     },
+
     Mutation: {
-        inputUser: async (obj, args) => {
+        inputUser: async (obj, args, ctx) => {
             try {
                 let id = null;
 
@@ -109,8 +131,13 @@ const resolvers = {
                         id = { id: args.input.id };
                         await users.update(args.input.id, args.input);
                     } else {
-                        throw new Error(
-                            `User with id ${args.input.id} not found`
+                        sendErrorRedirect(
+                            ctx.res,
+                            404,
+                            new Error(
+                                `User with id ${args.input.id} not found`
+                            ),
+                            'Inside GQL "inputUser" mutation'
                         );
                     }
                 } else {
@@ -124,20 +151,25 @@ const resolvers = {
                 return err;
             }
         },
-        removeUser: async (obj, args) => {
+        removeUser: async (obj, args, ctx) => {
             try {
                 if (await checkIfExists({ id: args.id }, 'Users')) {
                     await users.remove(args.id);
                     return { id: args.id };
                 } else {
-                    throw new Error(`User with id ${args.id} not found`);
+                    sendErrorRedirect(
+                        ctx.res,
+                        404,
+                        new Error(`User with id ${args.id} not found`),
+                        'Inside GQL "removetUser" mutation'
+                    );
                 }
             } catch (err) {
                 console.log(err);
                 return err;
             }
         },
-        inputEvent: async (obj, args) => {
+        inputEvent: async (obj, args, ctx) => {
             try {
                 let id = null;
 
@@ -146,8 +178,13 @@ const resolvers = {
                         id = { id: args.input.id };
                         await events.update(args.input.id, args.input);
                     } else {
-                        throw new Error(
-                            `Event with id ${args.input.id} not found`
+                        sendErrorRedirect(
+                            ctx.res,
+                            404,
+                            new Error(
+                                `Event with id ${args.input.id} not found`
+                            ),
+                            'Inside GQL "inputEvent" mutation'
                         );
                     }
                 } else {
@@ -161,20 +198,25 @@ const resolvers = {
                 return err;
             }
         },
-        removeEvent: async (obj, args) => {
+        removeEvent: async (obj, args, ctx) => {
             try {
                 if (await checkIfExists({ id: args.id }, 'Events')) {
                     await events.remove(args.id);
                     return { id: args.id };
                 } else {
-                    throw new Error(`Event with id ${args.id} not found`);
+                    sendErrorRedirect(
+                        ctx.res,
+                        404,
+                        new Error(`Event with id ${args.id} not found`),
+                        'Inside GQL "removeEvent" mutation'
+                    );
                 }
             } catch (err) {
                 console.log(err);
                 return err;
             }
         },
-        inputEventStatus: async (obj, args) => {
+        inputEventStatus: async (obj, args, ctx) => {
             try {
                 let id = null;
 
@@ -199,14 +241,17 @@ const resolvers = {
                 return err;
             }
         },
-        removeEventStatus: async (obj, args) => {
+        removeEventStatus: async (obj, args, ctx) => {
             try {
                 if (await checkIfExists(args, 'Events_Status')) {
                     await events.removeInvite(args);
                     return args;
                 } else {
-                    throw new Error(
-                        `EventStatus with ${JSON.stringify(args)} not found`
+                    sendErrorRedirect(
+                        ctx.res,
+                        404,
+                        new Error(`EventStatus with ${args} not found`),
+                        'Inside GQL "removeEventStatus" mutation'
                     );
                 }
             } catch (err) {
@@ -214,7 +259,7 @@ const resolvers = {
                 return err;
             }
         },
-        inputComment: async (obj, args) => {
+        inputComment: async (obj, args, ctx) => {
             try {
                 let id = null;
 
@@ -233,8 +278,13 @@ const resolvers = {
                                 args.comment
                             );
                         } else {
-                            throw new Error(
-                                `Comment with id ${args.comment.id} not found`
+                            sendErrorRedirect(
+                                ctx.res,
+                                404,
+                                new Error(
+                                    `Comment with id ${args.comment.id} not found`
+                                ),
+                                'Inside GQL "inputComment" mutation'
                             );
                         }
                     } else {
@@ -244,8 +294,13 @@ const resolvers = {
 
                     return { id };
                 } else {
-                    throw new Error(
-                        `Event with id ${args.comment.event_id} not found`
+                    sendErrorRedirect(
+                        ctx.res,
+                        404,
+                        new Error(
+                            `Comment with id ${args.comment.id} not found`
+                        ),
+                        'Inside GQL "inputComment" mutation'
                     );
                 }
             } catch (err) {
@@ -253,20 +308,27 @@ const resolvers = {
                 return err;
             }
         },
-        removeComment: async (obj, args) => {
+        removeComment: async (obj, args, ctx) => {
             try {
                 if (await checkIfExists({ id: args.id }, 'Comments')) {
                     await comments.remove(args.id);
                     return { id: args.id };
                 } else {
-                    throw new Error(`Comment with id ${args.id} not found`);
+                    sendErrorRedirect(
+                        ctx.res,
+                        404,
+                        new Error(
+                            `Comment with id ${args.comment.id} not found`
+                        ),
+                        'Inside GQL "removeComment" mutation'
+                    );
                 }
             } catch (err) {
                 console.log(err);
                 return err;
             }
         },
-        handleReaction: async (obj, args) => {
+        handleReaction: async (obj, args, ctx) => {
             const reaction = await commentReactions.findBy(args.reaction);
 
             if (!reaction) {
@@ -283,7 +345,7 @@ const resolvers = {
                 return await commentReactions.update(args.reaction); // update reaction
             }
         },
-        favoriteEventInput: async (obj, args) => {
+        favoriteEventInput: async (obj, args, ctx) => {
             try {
                 if (
                     await checkIfExists(
@@ -294,8 +356,13 @@ const resolvers = {
                         'User_Favorite_Events'
                     )
                 ) {
-                    throw new Error(
-                        `Event with id ${args.favoriteEvent.event_id} already favorite event`
+                    sendErrorRedirect(
+                        ctx.res,
+                        404,
+                        new Error(
+                            `Event with id ${args.favoriteEvent.event_id} already favorite event`
+                        ),
+                        'Inside GQL "FavoriteEventInput" mutation'
                     );
                 } else {
                     await users.addFavoriteEvent(args.favoriteEvent);
@@ -305,7 +372,7 @@ const resolvers = {
                 return err;
             }
         },
-        removeFavoriteEvent: async (obj, args) => {
+        removeFavoriteEvent: async (obj, args, ctx) => {
             try {
                 if (
                     await checkIfExists(
@@ -320,7 +387,12 @@ const resolvers = {
 
                     return { id: args.event };
                 } else {
-                    throw new Error(`Event with id ${args.event} not found`);
+                    sendErrorRedirect(
+                        ctx.res,
+                        404,
+                        new Error(`Event with id ${args.event} not found`),
+                        'Inside GQL "FavoriteEventInput" mutation'
+                    );
                 }
             } catch (err) {
                 return err;

@@ -26,9 +26,15 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.use((req, res, next) => {
+    req.res = res;
+    next();
+});
+
 app.use('/auth', authRouter);
 
 app.get('/wakeup', (req, res) => {
+    console.log('here');
     res.status(200).json({ awake: true });
 });
 
@@ -45,6 +51,12 @@ if (process.env.NODE_ENV == 'development') {
 }
 
 app.use('/graphql', graphLayer);
+
+app.get('/error', (req, res) => {
+    const { status, stacktrace, message, location, timestamp } = req.query;
+    res.status(status).json({ location, message, timestamp, stacktrace });
+    // res.status(status).json({ stacktrace, message, location, timestamp });
+});
 
 // const path = '/graphql';
 
