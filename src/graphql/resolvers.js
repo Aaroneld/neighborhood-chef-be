@@ -47,7 +47,7 @@ const resolvers = {
         },
         invited: async (obj, args) => {
             if (obj.id) {
-                await events.findInvitedUsersForEvent(obj.id);
+                return await events.findInvitedUsersForEvent(obj.id);
             } else {
                 throw new Error(`Event id ${obj.id} not found`);
             }

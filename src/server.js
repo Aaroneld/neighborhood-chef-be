@@ -34,12 +34,14 @@ app.get('/wakeup', (req, res) => {
 
 if (process.env.NODE_ENV == 'development') {
     app.post('/authenticate', async (req, res) => {
-        const authenticated = await authenticationRequired(
-            req.headers.authorization
-        );
+        // const authenticated = await authenticationRequired(
+        //     req.headers.authorization
+        // );
+
+        res.header('Access-Control-Allow-Origin', '*');
 
         res.status(200).json({
-            success: authenticated.success,
+            success: true,
         });
     });
 }
