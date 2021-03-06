@@ -82,6 +82,15 @@ const resolvers = {
                 throw new Error(`User id ${obj.id} not found`);
             }
         },
+        local: async (obj, args) => {
+            if (args.mileRadius) {
+                return await events.findEventsWithinRadius(
+                    args.mileRadius,
+                    obj.latitude,
+                    obj.longitude
+                );
+            } else return [];
+        },
     },
     Comment: {
         User: async (obj, args) => {

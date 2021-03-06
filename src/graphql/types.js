@@ -8,6 +8,7 @@ const typeDefs = gql`
         attending: [Event]!
         invited: [Event]!
         favorited: [Event]!
+        local(mileRadius: Int!): [Event]!
     }
 
     type User {
