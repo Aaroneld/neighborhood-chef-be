@@ -291,6 +291,7 @@ const resolvers = {
                     return { id: args.favoriteEvent.event_id };
                 }
             } catch (err) {
+                console.log(err);
                 return err;
             }
         },
@@ -299,17 +300,19 @@ const resolvers = {
                 if (
                     await checkIfExists(
                         {
-                            event_id: args.event,
-                            user_id: args.user,
+                            event_id: args.favoriteEvent.event_id,
+                            user_id: args.favoriteEvent.user_id,
                         },
                         'User_Favorite_Events'
                     )
                 ) {
-                    await users.removeFavoriteEvent(args.event, args.user);
+                    await users.removeFavoriteEvent(args.favoriteEvent);
 
-                    return { id: args.event };
+                    return { id: args.favoriteEvent.event_id };
                 } else {
-                    throw new Error(`Event with id ${args.event} not found`);
+                    throw new Error(
+                        `Event with id ${args.favoriteEvent.event_id} not found`
+                    );
                 }
             } catch (err) {
                 return err;

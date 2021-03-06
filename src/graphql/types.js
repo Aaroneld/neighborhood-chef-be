@@ -161,7 +161,7 @@ const typeDefs = gql`
         removeComment(id: ID!): Comment!
         handleReaction(reaction: ReactionInput!): [Reaction!]
         favoriteEventInput(favoriteEvent: FavoriteEventInput!): Event!
-        removeFavoriteEvent(user: Int!, event: Int!): Event!
+        removeFavoriteEvent(favoriteEvent: FavoriteEventInput!): Event!
     }
 `;
 
