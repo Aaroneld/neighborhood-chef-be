@@ -4,7 +4,7 @@ const { checkIfExists } = require('./utilities');
 const resolvers = {
     Query: {
         Status: () => 'OK!',
-        Users: async (obj, args) => {
+        Users: async (obj, args, ctx) => {
             if (args.queryParams) {
                 return await users.findBy(args.queryParams);
             }
@@ -218,36 +218,25 @@ const resolvers = {
             try {
                 let id = null;
 
-                if (
-                    await checkIfExists({ id: args.comment.event_id }, 'Events') // check if event exists
-                ) {
-                    if (args.comment.id) {
-                        if (
-                            await checkIfExists(
-                                { id: args.comment.id },
-                                'Comments'
-                            ) // check if comment exists
-                        ) {
-                            id = await comments.update(
-                                args.comment.id,
-                                args.comment
-                            );
-                        } else {
-                            throw new Error(
-                                `Comment with id ${args.comment.id} not found`
-                            );
-                        }
+                if (args.comment.id) {
+                    if (
+                        await checkIfExists({ id: args.comment.id }, 'Comments') // check if comment exists
+                    ) {
+                        id = await comments.update(
+                            args.comment.id,
+                            args.comment
+                        );
                     } else {
-                        id = await comments.add(args.comment); // else add new comment
+                        throw new Error(
+                            `Comment with id ${args.comment.id} not found`
+                        );
                     }
-                    id = id.id;
-
-                    return { id };
                 } else {
-                    throw new Error(
-                        `Event with id ${args.comment.event_id} not found`
-                    );
+                    id = await comments.add(args.comment); // else add new comment
                 }
+                id = id.id;
+
+                return { id };
             } catch (err) {
                 console.log(err);
                 return err;
