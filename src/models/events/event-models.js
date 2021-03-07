@@ -18,6 +18,7 @@ module.exports = {
     findInvitedUsersForEvent,
     findAttendingUsersForEvent,
     findEventsWithinRadius,
+    findEventStatus,
 };
 
 function find() {
@@ -153,8 +154,17 @@ function findAttendingEvents(id) {
         .andWhere('Events_Status.status', 'Going');
 }
 
+function findEventStatus(event_id, user_id) {
+    return db('Events_Status')
+        .select('status')
+        .where({ event_id, user_id })
+        .first();
+}
+
 function findEventsWithinRadius(radius, latitude, longitude) {
     distanceFromCenter = radius * 0.326333;
+    //y=-0.0001214x^{2}-0.001881x+1.153
+
     return db('Events')
         .select('*')
         .whereBetween('latitude', [
