@@ -113,7 +113,6 @@ const resolvers = {
                     obj.latitude,
                     obj.longitude
                 );
-                console.log(localEvents);
                 return localEvents;
             } else return [];
         },

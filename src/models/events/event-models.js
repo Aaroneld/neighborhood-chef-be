@@ -30,6 +30,11 @@ function findBy(filter) {
 }
 
 async function add(event) {
+    event.hashtags = JSON.stringify(event.hashtags);
+    event.modifiers = JSON.stringify(event.modifiers);
+    event.allergenWarnings = JSON.stringify(event.allergenWarnings);
+    event.dietaryWarnings = JSON.stringify(event.dietaryWarnings);
+
     const [id] = await db('Events').insert(event).returning('id');
 
     return findById(id);
@@ -40,6 +45,11 @@ function findById(id) {
 }
 
 function update(id, changes) {
+    changes.hashtags = JSON.stringify(changes.hashtags);
+    changes.modifiers = JSON.stringify(changes.modifiers);
+    changes.allergenWarnings = JSON.stringify(changes.allergenWarnings);
+    changes.dietaryWarnings = JSON.stringify(changes.dietaryWarnings);
+
     return db('Events')
         .where({ id })
         .update(changes)
