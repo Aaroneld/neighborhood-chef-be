@@ -134,14 +134,12 @@ const typeDefs = gql`
         id: ID!
         event_id: Int!
         status: Status!
-        inviter_id: User!
         user_id: Int!
     }
 
     input EventStatusInput {
         event_id: Int!
         status: Status!
-        inviter_id: Int!
         user_id: Int!
     }
 
@@ -156,7 +154,7 @@ const typeDefs = gql`
         removeUser(id: ID!): User!
         inputEvent(input: EventInput!): Event!
         removeEvent(id: ID!): Event!
-        inputEventStatus(eventStatus: EventStatusInput): Event!
+        inputEventStatus(eventStatus: EventStatusInput!): Event!
         removeEventStatus(event_id: Int!, user_id: Int!): EventStatus!
         inputComment(comment: CommentInput!): Comment!
         removeComment(id: ID!): Comment!

@@ -82,11 +82,7 @@ function findInvitedUsersForEvent(id) {
             builder.where({ 'Events.id': id });
         })
         .andWhere(function () {
-            this.whereIn('Events_Status.status', [
-                'Maybe Going',
-                'Approved',
-                'Not Approved',
-            ]);
+            this.whereIn('Events_Status.status', ['MAYBE_GOING', 'NOT_GOING']);
         });
 }
 
@@ -99,7 +95,7 @@ function findAttendingUsersForEvent(id) {
             builder.where({ 'Events.id': id });
         })
         .andWhere(function () {
-            this.whereIn('Events_Status.status', ['Going']);
+            this.whereIn('Events_Status.status', ['GOING']);
         });
 }
 
@@ -138,11 +134,7 @@ function findInvitedEvents(id) {
         .join('Events_Status', 'Events_Status.event_id', 'Events.id')
         .whereNot('Events.user_id', id)
         .where('Events_Status.user_id', id)
-        .whereIn('Events_Status.status', [
-            'Maybe Going',
-            'Approved',
-            'Not Approved',
-        ]);
+        .whereIn('Events_Status.status', ['MAYBE_GOING', 'NOT_GOING']);
 }
 
 function findAttendingEvents(id) {
@@ -151,7 +143,7 @@ function findAttendingEvents(id) {
         .join('Events_Status', 'Events_Status.event_id', 'Events.id')
         .whereNot('Events.user_id', id)
         .where('Events_Status.user_id', id)
-        .andWhere('Events_Status.status', 'Going');
+        .andWhere('Events_Status.status', 'GOING');
 }
 
 function findEventStatus(event_id, user_id) {

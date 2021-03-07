@@ -3,7 +3,9 @@ require('dotenv');
 module.exports = {
     development: {
         client: 'pg',
-        connection: 'postgres://postgres:1994@localhost:5434/nhc_dev',
+        connection:
+            process.env.POSTGRES_CONNECTION_STRING ||
+            'postgres://postgres:Jellos1127@@localhost:5432/nhc_dev',
         pool: {
             min: 0,
             max: 2,

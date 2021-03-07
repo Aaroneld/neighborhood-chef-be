@@ -255,7 +255,7 @@ const resolvers = {
 
                 if (args.comment.id) {
                     if (
-                        await checkIfExists({ id: args.comment.id }, 'Comments') // check if comment exists
+                        await checkIfExists({ id: args.comment.id }, 'Comments')
                     ) {
                         id = await comments.update(
                             args.comment.id,
@@ -267,7 +267,7 @@ const resolvers = {
                         );
                     }
                 } else {
-                    id = await comments.add(args.comment); // else add new comment
+                    id = await comments.add(args.comment);
                 }
                 id = id.id;
 
