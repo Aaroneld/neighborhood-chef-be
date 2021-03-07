@@ -7,7 +7,8 @@ const typeDefs = gql`
         owned: [Event]!
         attending: [Event]!
         invited: [Event]!
-        favorited: [Event]!
+        favorited: [Int]!
+        local(mileRadius: Int!): [Event]!
     }
 
     type User {
@@ -56,6 +57,7 @@ const typeDefs = gql`
         longitude: Float!
         Comments: [Comment]!
         EventUsers: EventUsers!
+        status: Status!
     }
 
     type EventUsers {
@@ -122,11 +124,10 @@ const typeDefs = gql`
     }
 
     enum Status {
-        Not_Approved
-        Approved
-        Not_Going
-        Maybe_Going
-        Going
+        UNDECIDED
+        NOT_GOING
+        MAYBE_GOING
+        GOING
     }
 
     type EventStatus {

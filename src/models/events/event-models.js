@@ -17,6 +17,8 @@ module.exports = {
     removeInvite,
     findInvitedUsersForEvent,
     findAttendingUsersForEvent,
+    findEventsWithinRadius,
+    findEventStatus,
 };
 
 function find() {
@@ -150,4 +152,27 @@ function findAttendingEvents(id) {
         .whereNot('Events.user_id', id)
         .where('Events_Status.user_id', id)
         .andWhere('Events_Status.status', 'Going');
+}
+
+function findEventStatus(event_id, user_id) {
+    return db('Events_Status')
+        .select('status')
+        .where({ event_id, user_id })
+        .first();
+}
+
+function findEventsWithinRadius(radius, latitude, longitude) {
+    distanceFromCenter = radius * 0.326333;
+    //y=-0.0001214x^{2}-0.001881x+1.153
+
+    return db('Events')
+        .select('*')
+        .whereBetween('latitude', [
+            Number(latitude) - distanceFromCenter,
+            Number(latitude) + distanceFromCenter,
+        ])
+        .andWhereBetween('longitude', [
+            Number(longitude) - distanceFromCenter,
+            Number(longitude) + distanceFromCenter,
+        ]);
 }

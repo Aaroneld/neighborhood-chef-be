@@ -6,7 +6,12 @@ const resolvers = {
         Status: () => 'OK!',
         Users: async (obj, args, ctx) => {
             if (args.queryParams) {
-                return await users.findBy(args.queryParams);
+                const usersList = await users.findBy(args.queryParams);
+                if (usersList.length === 1) {
+                    ctx.user_id = usersList[0].id;
+                }
+
+                return await usersList;
             }
             return await users.find();
         },
@@ -33,6 +38,22 @@ const resolvers = {
             }
         },
         EventUsers: (obj) => obj,
+        status: async (obj, _, ctx) => {
+            if (ctx.user_id) {
+                let status = await events.findEventStatus(obj.id, ctx.user_id);
+
+                if (status) return status.status;
+                else return 'UNDECIDED';
+            } else {
+                throw new Error(
+                    `Query Field Requested on Query with either more than 1
+                    user returned or without any reference to user -- this field
+                    is meant to be used with events that are related to 1 and only
+                    1 user
+                    `
+                );
+            }
+        },
     },
     User: {
         UserEvents: (obj) => obj,
@@ -77,10 +98,24 @@ const resolvers = {
         },
         favorited: async (obj, args) => {
             if (obj.id) {
-                return await users.findAllFavoriteEvents(obj.id);
+                const favoriteEvents = await users.findAllFavoriteEvents(
+                    obj.id
+                );
+                return favoriteEvents.map((event) => event.id);
             } else {
                 throw new Error(`User id ${obj.id} not found`);
             }
+        },
+        local: async (obj, args) => {
+            if (args.mileRadius) {
+                const localEvents = await events.findEventsWithinRadius(
+                    args.mileRadius,
+                    obj.latitude,
+                    obj.longitude
+                );
+                console.log(localEvents);
+                return localEvents;
+            } else return [];
         },
     },
     Comment: {
