@@ -46,9 +46,10 @@ const resolvers = {
                 else return 'UNDECIDED';
             } else {
                 throw new Error(
-                    `Query Field Requested on Query with either more than 1
-                    user returned or without any reference to user -- this field
-                    is meant to be used with events that are related to 1 and only
+                    `status' Query Field Requested on 'Event' Query 
+                    with either more than 1 user in graph or without 
+                    any reference to user -- this field is meant to be 
+                    used with events that are related to 1 and only
                     1 user
                     `
                 );
