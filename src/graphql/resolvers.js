@@ -109,6 +109,7 @@ const resolvers = {
         },
         local: async (obj, args) => {
             if (args.mileRadius) {
+                console.log('here');
                 const localEvents = await events.findEventsWithinRadius(
                     args.mileRadius,
                     obj.latitude,

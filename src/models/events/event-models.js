@@ -163,19 +163,37 @@ function findEventStatus(event_id, user_id) {
         .first();
 }
 
+function longitudeMinuteInMilesAtLatitude(latitude) {
+    return (
+        (6557 / 54000000) * latitude ** 2 -
+        (10159 / 5400000) * latitude +
+        17293 / 15000
+    );
+}
+
+function oneMileInTermsOfMinutes(MinuteInMiles) {
+    const mileAsPercentOfMinute = 1 / MinuteInMiles;
+    return (1 / 60) * mileAsPercentOfMinute;
+}
+
 function findEventsWithinRadius(radius, latitude, longitude) {
-    distanceFromCenter = radius * 0.326333;
-    //y=-0.0001214x^{2}-0.001881x+1.153
+    const longitudeMinuteInMiles = longitudeMinuteInMilesAtLatitude(
+        Math.abs(latitude)
+    );
+    const longitudeMinuteMile = oneMileInTermsOfMinutes(longitudeMinuteInMiles);
+    const latitudeMinuteMile = oneMileInTermsOfMinutes(69 / 60);
+    const latitudeRadius = latitudeMinuteMile * radius;
+    const longitudeRadius = longitudeMinuteMile * radius;
 
     return db('Events')
         .select('*')
         .whereBetween('latitude', [
-            Number(latitude) - distanceFromCenter,
-            Number(latitude) + distanceFromCenter,
+            Number(latitude) - latitudeRadius,
+            Number(latitude) + latitudeRadius,
         ])
         .andWhereBetween('longitude', [
-            Number(longitude) - distanceFromCenter,
-            Number(longitude) + distanceFromCenter,
+            Number(longitude) - longitudeRadius,
+            Number(longitude) + longitudeRadius,
         ]);
 }
 
