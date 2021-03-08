@@ -8,17 +8,19 @@ module.exports = {
     update,
     remove,
     findUsersForEvent,
-    inviteUserToEvent,
+    addEventStatus,
     findIfUserIsAlreadyInvited,
     findUninvitedUsersForEvent,
     findInvitedEvents,
     findAttendingEvents,
-    updateInvite,
-    removeInvite,
+    updateStatus,
+    removeStatus,
     findInvitedUsersForEvent,
     findAttendingUsersForEvent,
     findEventsWithinRadius,
     findEventStatus,
+    addEventInvite,
+    removeEventInvite,
 };
 
 function find() {
@@ -116,35 +118,33 @@ function findIfUserIsAlreadyInvited(invite) {
         .first();
 }
 
-async function inviteUserToEvent(invite) {
-    const invitation = await db('Events_Status').insert(invite);
+async function addEventStatus(status) {
+    await db('Events_Status').insert(status);
 
-    return findById(invite.event_id);
+    return findById(status.event_id);
 }
 
-async function updateInvite(invite) {
-    const updated = await db('Events_Status')
-        .where('Events_Status.event_id', invite.event_id)
-        .andWhere('Events_Status.user_id', invite.user_id)
-        .update(invite);
+async function updateStatus(status) {
+    await db('Events_Status')
+        .where({ event_id: status.event_id, user_id: status.user_id })
+        .update(status);
 
-    return db('Events').where('id', invite.event_id).first();
+    return await db('Events').where('id', status.event_id).first();
 }
 
-function removeInvite(invite) {
+function removeStatus(status) {
     return db('Events_Status')
-        .where('Events_Status.event_id', invite.event_id)
-        .andWhere('Events_Status.user_id', invite.user_id)
+        .where({ event_id: status.event_id, user_id: status.user_id })
         .del();
 }
 
 function findInvitedEvents(id) {
-    return db('Events')
-        .select('Events.*')
-        .join('Events_Status', 'Events_Status.event_id', 'Events.id')
-        .whereNot('Events.user_id', id)
-        .where('Events_Status.user_id', id)
-        .whereIn('Events_Status.status', ['MAYBE_GOING', 'NOT_GOING']);
+    return db('Events as e')
+        .distinctOn('e.id')
+        .select('e.*')
+        .join('Event_Invites as ei', 'ei.event_id', 'e.id')
+        .whereNot('e.user_id', id)
+        .where('ei.user_id', id);
 }
 
 function findAttendingEvents(id) {
@@ -177,4 +177,14 @@ function findEventsWithinRadius(radius, latitude, longitude) {
             Number(longitude) - distanceFromCenter,
             Number(longitude) + distanceFromCenter,
         ]);
+}
+
+async function addEventInvite(invite) {
+    await db('Event_Invites').insert(invite);
+    return true;
+}
+
+async function removeEventInvite(invite) {
+    await db('Event_Invites').where(invite).del();
+    return true;
 }

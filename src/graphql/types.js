@@ -143,6 +143,12 @@ const typeDefs = gql`
         user_id: Int!
     }
 
+    input EventInviteInput {
+        event_id: Int!
+        inviter_id: Int!
+        user_id: Int!
+    }
+
     type Query {
         Status: String!
         Users(queryParams: UserInput): [User]!
@@ -161,6 +167,8 @@ const typeDefs = gql`
         handleReaction(reaction: ReactionInput!): [Reaction!]
         favoriteEventInput(favoriteEvent: FavoriteEventInput!): Event!
         removeFavoriteEvent(favoriteEvent: FavoriteEventInput!): Event!
+        inputEventInvite(inviteInput: EventInviteInput!): Boolean!
+        removeEventInvite(inviteInput: EventInviteInput!): Boolean!
     }
 `;
 

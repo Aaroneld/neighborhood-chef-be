@@ -221,9 +221,9 @@ const resolvers = {
                         'Events_Status'
                     )
                 ) {
-                    id = await events.updateInvite(args.eventStatus);
+                    id = await events.updateStatus(args.eventStatus);
                 } else {
-                    id = await events.inviteUserToEvent(args.eventStatus);
+                    id = await events.addEventStatus(args.eventStatus);
                 }
                 id = id.id;
 
@@ -236,7 +236,7 @@ const resolvers = {
         removeEventStatus: async (obj, args) => {
             try {
                 if (await checkIfExists(args, 'Events_Status')) {
-                    await events.removeInvite(args);
+                    await events.removeStatus(args);
                     return args;
                 } else {
                     throw new Error(
@@ -346,6 +346,50 @@ const resolvers = {
                 } else {
                     throw new Error(
                         `Event with id ${args.favoriteEvent.event_id} not found`
+                    );
+                }
+            } catch (err) {
+                return err;
+            }
+        },
+        inputEventInvite: async (obj, args) => {
+            try {
+                if (
+                    await checkIfExists(
+                        {
+                            event_id: args.inviteInput.event_id,
+                            user_id: args.inviteInput.user_id,
+                            inviter_id: args.inviteInput.inviter_id,
+                        },
+                        'Event_Invites'
+                    )
+                ) {
+                    throw new Error(
+                        `User ${args.inviteInput.inviter_id} already invited ${args.inviteInput.user_id} to event ${args.inviteInput.event_id}`
+                    );
+                } else {
+                    return await events.addEventInvite(args.inviteInput);
+                }
+            } catch (err) {
+                return err;
+            }
+        },
+        removeEventInvite: async (obj, args) => {
+            try {
+                if (
+                    await checkIfExists(
+                        {
+                            event_id: args.inviteInput.event_id,
+                            user_id: args.inviteInput.user_id,
+                            inviter_id: args.inviteInput.inviter_id,
+                        },
+                        'Event_Invites'
+                    )
+                ) {
+                    return await events.removeEventInvite(args.inviteInput);
+                } else {
+                    throw new Error(
+                        `User ${args.inviteInput.inviter_id} inviting User ${args.inviteInput.user_id} to event ${args.inviteInput.event_id} does not exist`
                     );
                 }
             } catch (err) {
