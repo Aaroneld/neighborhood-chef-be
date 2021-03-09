@@ -6,12 +6,16 @@ const resolvers = {
         Status: () => 'OK!',
         Users: async (_, args, ctx) => {
             try {
-               const usersList = await users.findBy(args.queryParams);
-                if (usersList.length === 1) {
-                    ctx.user_id = usersList[0].id;
-                }
+                if (args.queryParams) {
+                    const usersList = await users.findBy(args.queryParams);
+                    if (usersList.length === 1) {
+                        ctx.user_id = usersList[0].id;
+                    }
 
-                return await usersList;
+                    return await usersList;
+                } else {
+                    return await users.find();
+                }
             } catch (err) {
                 sendErrorRedirect(
                     ctx.res,
@@ -70,7 +74,7 @@ const resolvers = {
                     400,
                     new Error(`Event id is required`),
                     'Inside GQL Event->EventUsers subquery'
-                );,
+                );
         },
         status: async (obj, _, ctx) => {
             if (ctx.user_id) {
@@ -79,13 +83,16 @@ const resolvers = {
                 if (status) return status.status;
                 else return 'UNDECIDED';
             } else {
-                throw new Error(
-                    `status' Query Field Requested on 'Event' Query 
-                    with either more than 1 user in graph or without 
-                    any reference to user -- this field is meant to be 
+                sendErrorRedirect(
+                    ctx.res,
+                    400,
+                    new Error(`
+                    status' Query Field Requested on 'Event' Query
+                    with either more than 1 user in graph or without
+                    any reference to user -- this field is meant to be
                     used with events that are related to 1 and only
-                    1 user
-                    `
+                    1 user`),
+                    'Inside GQL Event->EventUsers->status subquery'
                 );
             }
         },
@@ -111,20 +118,20 @@ const resolvers = {
         owned: async (obj) => await events.findBy({ user_id: obj.id }),
         attending: async (obj) => await events.findAttendingEvents(obj.id),
         invited: async (obj) => await events.findInvitedEvents(obj.id),
-        favorited: async (obj) => { 
-              const favoriteEvents = await users.findAllFavoriteEvents(obj.id);
-              return favoriteEvents.map((event) => event.id);
+        favorited: async (obj) => {
+            const favoriteEvents = await users.findAllFavoriteEvents(obj.id);
+            return favoriteEvents.map((event) => event.id);
         },
-       local: async (obj, args) => {
-         if (args.mileRadius) {
-              const localEvents = await events.findEventsWithinRadius(
-                  args.mileRadius,
-                  obj.latitude,
-                  obj.longitude
-              );
-              return localEvents;
-           } else return [];
-       }
+        local: async (obj, args) => {
+            if (args.mileRadius) {
+                const localEvents = await events.findEventsWithinRadius(
+                    args.mileRadius,
+                    obj.latitude,
+                    obj.longitude
+                );
+                return localEvents;
+            } else return [];
+        },
     },
     Comment: {
         User: async (obj, args, ctx) => {
@@ -295,7 +302,6 @@ const resolvers = {
             try {
                 let id = null;
 
-
                 if (
                     await checkIfExists({ id: args.comment.event_id }, 'Events') // check if event exists
                 ) {
@@ -320,10 +326,8 @@ const resolvers = {
                                 'Inside GQL "inputComment" mutation'
                             );
                         }
-
                     }
                 } else {
-
                     id = await comments.add(args.comment);
                 }
                 id = id.id;
