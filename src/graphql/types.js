@@ -7,7 +7,8 @@ const typeDefs = gql`
         owned: [Event]!
         attending: [Event]!
         invited: [Event]!
-        favorited: [Event]!
+        favorited: [Int]!
+        local(mileRadius: Int!): [Event]!
     }
 
     type User {
@@ -56,6 +57,7 @@ const typeDefs = gql`
         longitude: Float!
         Comments: [Comment]!
         EventUsers: EventUsers!
+        status: Status!
     }
 
     type EventUsers {
@@ -122,24 +124,27 @@ const typeDefs = gql`
     }
 
     enum Status {
-        Not_Approved
-        Approved
-        Not_Going
-        Maybe_Going
-        Going
+        UNDECIDED
+        NOT_GOING
+        MAYBE_GOING
+        GOING
     }
 
     type EventStatus {
         id: ID!
         event_id: Int!
         status: Status!
-        inviter_id: User!
         user_id: Int!
     }
 
     input EventStatusInput {
         event_id: Int!
         status: Status!
+        user_id: Int!
+    }
+
+    input EventInviteInput {
+        event_id: Int!
         inviter_id: Int!
         user_id: Int!
     }
@@ -155,13 +160,15 @@ const typeDefs = gql`
         removeUser(id: ID!): User!
         inputEvent(input: EventInput!): Event!
         removeEvent(id: ID!): Event!
-        inputEventStatus(eventStatus: EventStatusInput): Event!
+        inputEventStatus(eventStatus: EventStatusInput!): Event!
         removeEventStatus(event_id: Int!, user_id: Int!): EventStatus!
         inputComment(comment: CommentInput!): Comment!
         removeComment(id: ID!): Comment!
         handleReaction(reaction: ReactionInput!): [Reaction!]
         favoriteEventInput(favoriteEvent: FavoriteEventInput!): Event!
-        removeFavoriteEvent(user: Int!, event: Int!): Event!
+        removeFavoriteEvent(favoriteEvent: FavoriteEventInput!): Event!
+        inputEventInvite(inviteInput: EventInviteInput!): Boolean!
+        removeEventInvite(inviteInput: EventInviteInput!): Boolean!
     }
 `;
 

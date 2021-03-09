@@ -6,10 +6,12 @@ const resolvers = {
         Status: () => 'OK!',
         Users: async (_, args, ctx) => {
             try {
-                if (args.queryParams) {
-                    return await users.findBy(args.queryParams);
+               const usersList = await users.findBy(args.queryParams);
+                if (usersList.length === 1) {
+                    ctx.user_id = usersList[0].id;
                 }
-                return await users.find();
+
+                return await usersList;
             } catch (err) {
                 sendErrorRedirect(
                     ctx.res,
@@ -68,7 +70,24 @@ const resolvers = {
                     400,
                     new Error(`Event id is required`),
                     'Inside GQL Event->EventUsers subquery'
+                );,
+        },
+        status: async (obj, _, ctx) => {
+            if (ctx.user_id) {
+                let status = await events.findEventStatus(obj.id, ctx.user_id);
+
+                if (status) return status.status;
+                else return 'UNDECIDED';
+            } else {
+                throw new Error(
+                    `status' Query Field Requested on 'Event' Query 
+                    with either more than 1 user in graph or without 
+                    any reference to user -- this field is meant to be 
+                    used with events that are related to 1 and only
+                    1 user
+                    `
                 );
+            }
         },
     },
     User: {
@@ -92,7 +111,20 @@ const resolvers = {
         owned: async (obj) => await events.findBy({ user_id: obj.id }),
         attending: async (obj) => await events.findAttendingEvents(obj.id),
         invited: async (obj) => await events.findInvitedEvents(obj.id),
-        favorited: async (obj) => await users.findAllFavoriteEvents(obj.id),
+        favorited: async (obj) => { 
+              const favoriteEvents = await users.findAllFavoriteEvents(obj.id);
+              return favoriteEvents.map((event) => event.id);
+        },
+       local: async (obj, args) => {
+         if (args.mileRadius) {
+              const localEvents = await events.findEventsWithinRadius(
+                  args.mileRadius,
+                  obj.latitude,
+                  obj.longitude
+              );
+              return localEvents;
+           } else return [];
+       }
     },
     Comment: {
         User: async (obj, args, ctx) => {
@@ -229,9 +261,9 @@ const resolvers = {
                         'Events_Status'
                     )
                 ) {
-                    id = await events.updateInvite(args.eventStatus);
+                    id = await events.updateStatus(args.eventStatus);
                 } else {
-                    id = await events.inviteUserToEvent(args.eventStatus);
+                    id = await events.addEventStatus(args.eventStatus);
                 }
                 id = id.id;
 
@@ -244,7 +276,7 @@ const resolvers = {
         removeEventStatus: async (obj, args, ctx) => {
             try {
                 if (await checkIfExists(args, 'Events_Status')) {
-                    await events.removeInvite(args);
+                    await events.removeStatus(args);
                     return args;
                 } else {
                     sendErrorRedirect(
@@ -262,6 +294,7 @@ const resolvers = {
         inputComment: async (obj, args, ctx) => {
             try {
                 let id = null;
+
 
                 if (
                     await checkIfExists({ id: args.comment.event_id }, 'Events') // check if event exists
@@ -287,22 +320,15 @@ const resolvers = {
                                 'Inside GQL "inputComment" mutation'
                             );
                         }
-                    } else {
-                        id = await comments.add(args.comment); // else add new comment
-                    }
-                    id = id.id;
 
-                    return { id };
+                    }
                 } else {
-                    sendErrorRedirect(
-                        ctx.res,
-                        404,
-                        new Error(
-                            `Comment with id ${args.comment.id} not found`
-                        ),
-                        'Inside GQL "inputComment" mutation'
-                    );
+
+                    id = await comments.add(args.comment);
                 }
+                id = id.id;
+
+                return { id };
             } catch (err) {
                 console.log(err);
                 return err;
@@ -369,6 +395,7 @@ const resolvers = {
                     return { id: args.favoriteEvent.event_id };
                 }
             } catch (err) {
+                console.log(err);
                 return err;
             }
         },
@@ -377,21 +404,62 @@ const resolvers = {
                 if (
                     await checkIfExists(
                         {
-                            event_id: args.event,
-                            user_id: args.user,
+                            event_id: args.favoriteEvent.event_id,
+                            user_id: args.favoriteEvent.user_id,
                         },
                         'User_Favorite_Events'
                     )
                 ) {
-                    await users.removeFavoriteEvent(args.event, args.user);
+                    await users.removeFavoriteEvent(args.favoriteEvent);
 
-                    return { id: args.event };
+                    return { id: args.favoriteEvent.event_id };
                 } else {
-                    sendErrorRedirect(
-                        ctx.res,
-                        404,
-                        new Error(`Event with id ${args.event} not found`),
-                        'Inside GQL "FavoriteEventInput" mutation'
+                    throw new Error(
+                        `Event with id ${args.favoriteEvent.event_id} not found`
+                    );
+                }
+            } catch (err) {
+                return err;
+            }
+        },
+        inputEventInvite: async (obj, args) => {
+            try {
+                if (
+                    await checkIfExists(
+                        {
+                            event_id: args.inviteInput.event_id,
+                            user_id: args.inviteInput.user_id,
+                            inviter_id: args.inviteInput.inviter_id,
+                        },
+                        'Event_Invites'
+                    )
+                ) {
+                    throw new Error(
+                        `User ${args.inviteInput.inviter_id} already invited ${args.inviteInput.user_id} to event ${args.inviteInput.event_id}`
+                    );
+                } else {
+                    return await events.addEventInvite(args.inviteInput);
+                }
+            } catch (err) {
+                return err;
+            }
+        },
+        removeEventInvite: async (obj, args) => {
+            try {
+                if (
+                    await checkIfExists(
+                        {
+                            event_id: args.inviteInput.event_id,
+                            user_id: args.inviteInput.user_id,
+                            inviter_id: args.inviteInput.inviter_id,
+                        },
+                        'Event_Invites'
+                    )
+                ) {
+                    return await events.removeEventInvite(args.inviteInput);
+                } else {
+                    throw new Error(
+                        `User ${args.inviteInput.inviter_id} inviting User ${args.inviteInput.user_id} to event ${args.inviteInput.event_id} does not exist`
                     );
                 }
             } catch (err) {

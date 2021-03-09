@@ -56,10 +56,10 @@ async function addFavoriteEvent(favoriteEvent) {
     return findIfAlreadyFavorite(favoriteEvent);
 }
 
-function removeFavoriteEvent(event_id, user_id) {
+function removeFavoriteEvent(favoriteEvent) {
     return db('User_Favorite_Events')
-        .where('User_Favorite_Events.event_id', event_id)
-        .andWhere('User_Favorite_Events.user_id', user_id)
+        .where('User_Favorite_Events.event_id', favoriteEvent.event_id)
+        .andWhere('User_Favorite_Events.user_id', favoriteEvent.user_id)
         .del();
 }
 
