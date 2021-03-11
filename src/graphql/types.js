@@ -92,13 +92,14 @@ const typeDefs = gql`
     type Comment {
         id: ID!
         event_id: Int!
-        user_id: Int!
-        parent_id: Int!
-        root_id: Int!
+        parent: User
+        root_id: Int
         dateCreated: String!
         comment: String!
         Reactions: [Reaction]
         User: User!
+        Parent: User
+        Subcomments: [Comment]
     }
 
     input CommentInput {

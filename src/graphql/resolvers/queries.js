@@ -56,7 +56,10 @@ module.exports = {
         },
         Comments: async (obj, args, ctx) => {
             if (obj.id) {
-                return comments.findAllEventComments(obj.id);
+                const allEventComments = await comments.findAllEventComments(
+                    obj.id
+                );
+                return allEventComments.filter((event) => event.root_id === 0);
             } else {
                 sendErrorRedirect(
                     ctx.res,
@@ -157,6 +160,18 @@ module.exports = {
                     'Inside GQL Event->Comments->Comment->Reactions subquery'
                 );
             }
+        },
+        Subcomments: async (obj, args) => {
+            if (obj.id) {
+                return await comments.findBy({ root_id: obj.id });
+            } else {
+                return [];
+            }
+        },
+        Parent: async (obj, args) => {
+            if (obj.parent_id) {
+                return await users.findById(obj.parent_id);
+            } else return null;
         },
     },
 };
