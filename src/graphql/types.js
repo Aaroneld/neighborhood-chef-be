@@ -103,7 +103,6 @@ const typeDefs = gql`
     }
 
     input CommentInput {
-        id: ID
         event_id: Int
         user_id: Int
         parent_id: Int

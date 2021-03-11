@@ -136,6 +136,7 @@ module.exports = {
         }
     },
     inputComment: async (obj, args, ctx) => {
+        console.log(args);
         try {
             let id = null;
 
@@ -160,10 +161,21 @@ module.exports = {
                             'Inside GQL "inputComment" mutation'
                         );
                     }
+                } else {
+                    id = await comments.add(args.comment);
+                    console.log('in here', id);
                 }
             } else {
-                id = await comments.add(args.comment);
+                sendErrorRedirect(
+                    ctx.res,
+                    404,
+                    new Error(
+                        `Event with id ${args.comment.event_id} not found`
+                    ),
+                    'Inside GQL "inputComment" mutation'
+                );
             }
+
             id = id.id;
 
             return { id };
