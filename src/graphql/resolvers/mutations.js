@@ -136,7 +136,6 @@ module.exports = {
         }
     },
     inputComment: async (obj, args, ctx) => {
-        console.log(args);
         try {
             let id = null;
 
