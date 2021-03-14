@@ -1,14 +1,8 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
-const depthLimit = require('graphql-depth-limit');
 const cors = require('cors');
+
 const graphLayer = require('./graphql');
-
 const authRouter = require('./routes/authrouter');
-
-// const typeDefs = require('./graphql/schemas');
-// const resolvers = require('./graphql/resolvers');
-// const mocks = require('./mocks');
 const authenticationRequired = require('./middleware/oktaAuthentication');
 
 const app = express();
@@ -59,31 +53,5 @@ app.get('/error', (req, res) => {
     res.status(status).json({ location, message, timestamp, stacktrace });
     // res.status(status).json({ stacktrace, message, location, timestamp });
 });
-
-// const path = '/graphql';
-
-// const server = new ApolloServer({
-//   typeDefs,
-//   resolvers,
-//   mocks,
-//   mockEntireSchema: false,
-//   context: async ({ req }) => {
-//     const token = req.headers.authorization;
-
-//     const authenticated = authenticationRequired(token);
-
-//     return { authenticated };
-//   },
-//   validationRules: [depthLimit(3)],
-
-//   playground: {
-//     path: path,
-//     settings: {
-//       "editor.theme": "dark",
-//     },
-//   },
-// });
-
-//app.applyMiddleware({ app, path });
 
 module.exports = app;
