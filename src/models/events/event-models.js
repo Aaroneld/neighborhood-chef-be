@@ -21,6 +21,7 @@ module.exports = {
     findEventStatus,
     addEventInvite,
     removeEventInvite,
+    findUsersYouInvitedToParticularEvent,
 };
 
 function find() {
@@ -86,16 +87,10 @@ function findUsersForEvent(id) {
 }
 
 function findInvitedUsersForEvent(id) {
-    return db('Events')
-        .select('Users.*', 'Events_Status.status')
-        .join('Events_Status', 'Events_Status.event_id', 'Events.id')
-        .join('Users', 'Users.id', 'Events_Status.user_id')
-        .where((builder) => {
-            builder.where({ 'Events.id': id });
-        })
-        .andWhere(function () {
-            this.whereIn('Events_Status.status', ['MAYBE_GOING', 'NOT_GOING']);
-        });
+    return db('Event_Invites as ei')
+        .select('u.*')
+        .join('Users as u', 'ei.user_id', 'u.id')
+        .where({ 'ei.event_id': id });
 }
 
 function findAttendingUsersForEvent(id) {
@@ -205,4 +200,11 @@ async function addEventInvite(invite) {
 async function removeEventInvite(invite) {
     await db('Event_Invites').where(invite).del();
     return true;
+}
+
+function findUsersYouInvitedToParticularEvent(event_id, inviter_id) {
+    return db('Users as u')
+        .select('u.*')
+        .join('Event_Invites as ei', 'ei.user_id', 'u.id')
+        .where({ event_id, inviter_id });
 }

@@ -1,3 +1,4 @@
+const e = require('express');
 const { users, events, comments, commentReactions } = require('../../models');
 const { sendErrorRedirect } = require('../utilities');
 
@@ -27,6 +28,10 @@ module.exports = {
         },
         Events: async (_, args, ctx) => {
             try {
+                if (args.currentUser) {
+                    ctx.currentUser = args.currentUser;
+                }
+
                 if (args.queryParams) {
                     return await events.findBy(args.queryParams);
                 }
@@ -116,6 +121,16 @@ module.exports = {
         attending: async (obj) =>
             await events.findAttendingUsersForEvent(obj.id),
         invited: async (obj) => await events.findInvitedUsersForEvent(obj.id),
+        currentUserInvited: async (obj, _, ctx) => {
+            if (ctx.currentUser) {
+                return await events.findUsersYouInvitedToParticularEvent(
+                    obj.id,
+                    ctx.currentUser
+                );
+            } else {
+                return [];
+            }
+        },
     },
     UserEvents: {
         owned: async (obj) => await events.findBy({ user_id: obj.id }),

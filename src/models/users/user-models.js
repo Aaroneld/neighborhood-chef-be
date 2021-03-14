@@ -17,8 +17,19 @@ function find() {
     return db('Users');
 }
 
-function findBy(filter) {
-    return db('Users').where(filter);
+async function findBy(filter) {
+    if (
+        JSON.stringify(Object.keys(filter).sort()) ===
+        JSON.stringify(['latitude', 'longitude', 'radius'].sort())
+    ) {
+        return await findUsersWithinRadius(
+            filter.radius,
+            filter.latitude,
+            filter.longitude
+        );
+    } else {
+        return db('Users').where(filter);
+    }
 }
 
 async function add(user) {
@@ -71,4 +82,38 @@ function findAllFavoriteEvents(id) {
             'Events.id'
         )
         .where('User_Favorite_Events.user_id', id);
+}
+
+function longitudeMinuteInMilesAtLatitude(latitude) {
+    return (
+        (6557 / 54000000) * latitude ** 2 -
+        (10159 / 5400000) * latitude +
+        17293 / 15000
+    );
+}
+
+function oneMileInTermsOfMinutes(MinuteInMiles) {
+    const mileAsPercentOfMinute = 1 / MinuteInMiles;
+    return (1 / 60) * mileAsPercentOfMinute;
+}
+
+function findUsersWithinRadius(radius, latitude, longitude) {
+    const longitudeMinuteInMiles = longitudeMinuteInMilesAtLatitude(
+        Math.abs(latitude)
+    );
+    const longitudeMinuteMile = oneMileInTermsOfMinutes(longitudeMinuteInMiles);
+    const latitudeMinuteMile = oneMileInTermsOfMinutes(69 / 60);
+    const latitudeRadius = latitudeMinuteMile * radius;
+    const longitudeRadius = longitudeMinuteMile * radius;
+
+    return db('Users')
+        .select('*')
+        .whereBetween('latitude', [
+            Number(latitude) - latitudeRadius,
+            Number(latitude) + latitudeRadius,
+        ])
+        .andWhereBetween('longitude', [
+            Number(longitude) - longitudeRadius,
+            Number(longitude) + longitudeRadius,
+        ]);
 }

@@ -34,6 +34,7 @@ const typeDefs = gql`
         address: String
         latitude: Float
         longitude: Float
+        radius: Int
         photo: String
         activated: Boolean
     }
@@ -62,7 +63,8 @@ const typeDefs = gql`
 
     type EventUsers {
         attending: [User]!
-        invited: [User]!
+        invited: [User]
+        currentUserInvited: [User]
     }
 
     input EventInput {
@@ -152,7 +154,7 @@ const typeDefs = gql`
     type Query {
         Status: String!
         Users(queryParams: UserInput): [User]!
-        Events(queryParams: EventInput): [Event]!
+        Events(queryParams: EventInput, currentUser: Int): [Event]!
     }
 
     type Mutation {
