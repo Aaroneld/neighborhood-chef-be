@@ -1,9 +1,11 @@
-const Users = require('../models/users/user-models.js');
+const db = require('../../data/dbConfig');
 
 function isEmailUnique(req, res, next) {
   if (req.body.email) {
     const { email } = req.body;
-    Users.findBy({ email })
+
+    db('Users')
+      .where({ email })
       .first()
       .then((user) => {
         if (user) {
