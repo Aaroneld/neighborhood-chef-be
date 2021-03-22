@@ -1,4 +1,4 @@
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema
     .dropTableIfExists('Attendee_Ingredients')
     .dropTableIfExists('Event_Ingredients')
@@ -8,9 +8,9 @@ exports.up = function(knex) {
     .dropTableIfExists('IngredientTypes')
     .dropTableIfExists('UnitsOfMeasure')
     .dropTableIfExists('MeasurementTypes')
-    .dropTableIfExists('Recipes')
+    .dropTableIfExists('Recipes');
 };
 
-exports.down = function(knex) {
-  return knex.schema
+exports.down = function (knex) {
+  return knex.schema;
 };

@@ -1,10 +1,10 @@
-const oktaJwtVerifier = require("../utils/oktaJwtVerifier");
+const oktaJwtVerifier = require('../utils/oktaJwtVerifier');
 
-async function authenticationRequired(token = "") {
+async function authenticationRequired(token = '') {
   //   return { success: true };
 
   try {
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === 'development') {
       return {
         success: true,
       };
@@ -15,12 +15,12 @@ async function authenticationRequired(token = "") {
     if (!match)
       return {
         success: false,
-        error: "Authorization Header has invalid syntax or does not exist",
+        error: 'Authorization Header has invalid syntax or does not exist',
       };
 
     const accessToken = match[1];
 
-    await oktaJwtVerifier.verifyAccessToken(accessToken, "api://default");
+    await oktaJwtVerifier.verifyAccessToken(accessToken, 'api://default');
 
     return { success: true };
   } catch (err) {
