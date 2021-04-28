@@ -107,6 +107,6 @@ const modifiedResolvers = new GraphQLMiddlewareManagementEntity({
   },
 });
 
-console.log(modifiedResolvers.Query.status({ v: 10 }, { n: 20 }, { l: 30 }, { f: 40 }));
+// console.log(modifiedResolvers.Query.status({ v: 10 }, { n: 20 }, { l: 30 }, { f: 40 }));
 
 module.exports = GraphQLMiddlewareManagementEntity;

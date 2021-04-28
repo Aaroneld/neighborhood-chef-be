@@ -77,7 +77,7 @@ router.post('/register', cors(), isEmailUnique, buildHTML, async (req, res) => {
     }
 
     temp.cleanup((err, stat) => {
-      console.log(stat, 'stat');
+      // console.log(stat, 'stat');
       if (err) console.log(err);
     });
 
@@ -102,7 +102,7 @@ router.get('/activate', async (req, res, next) => {
   try {
     const { id, email, tempPass } = req.query;
 
-    console.log(req.query);
+    // console.log(req.query);
 
     const compareHash = crypto
       .createHmac('sha256', process.env.EMAIL_HASH_SECRET)
@@ -114,7 +114,7 @@ router.get('/activate', async (req, res, next) => {
     if (compareHash.toString() === formattedId) {
       const user = await users.findBy({ email });
 
-      console.log(email);
+      // console.log(email);
       const oktaUser = {
         profile: {
           firstName: user[0].firstName,
@@ -130,7 +130,7 @@ router.get('/activate', async (req, res, next) => {
 
       const stringified = JSON.stringify(oktaUser);
 
-      console.log(stringified);
+      // console.log(stringified);
 
       const response = await fetch(`https://${process.env.OKTA_BASE_URL}/api/v1/users?activate=true`, {
         method: 'post',
@@ -143,7 +143,7 @@ router.get('/activate', async (req, res, next) => {
       });
 
       const formattedResponse = await response.json();
-      console.log(formattedResponse);
+      // console.log(formattedResponse);
 
       const hash = crypto
         .createHmac('sha256', process.env.EMAIL_HASH_SECRET)
@@ -192,9 +192,9 @@ router.post('/initialChangePassword', async (req, res, next) => {
 
     const formattedHash = hash.replace(/\s/g, '+');
 
-    console.log(id);
-    console.log(compareHash.toString());
-    console.log(hash);
+    // console.log(id);
+    // console.log(compareHash.toString());
+    // console.log(hash);
 
     if (formattedHash === compareHash.toString()) {
       const client = new okta.Client({
@@ -207,7 +207,7 @@ router.post('/initialChangePassword', async (req, res, next) => {
       user.credentials.password.value = password;
 
       const updated = await user.update();
-      console.log(updated);
+      // console.log(updated);
 
       if (updated.status) {
         res.status(203).json({

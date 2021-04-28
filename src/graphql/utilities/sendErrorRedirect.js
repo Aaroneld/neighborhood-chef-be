@@ -1,7 +1,7 @@
 const url = require('url');
 
 module.exports = function sendErrorRedirect(res, status, error, location) {
-  console.log(status, error, location);
+  //console.log(status, error, location);
 
   res.redirect(
     url.format({
