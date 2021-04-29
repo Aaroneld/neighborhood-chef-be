@@ -79,7 +79,7 @@ router.post('/register', cors(), isEmailUnique, buildHTML, async (req, res) => {
       if (err) console.log(err);
     });
 
-    if (req.body.photo) {
+    if (req.body.photo && !req.body.photo.startsWith('http')) {
       await cloudinary.uploader
         .upload(req.body.photo, {
           upload_preset: 'upload',

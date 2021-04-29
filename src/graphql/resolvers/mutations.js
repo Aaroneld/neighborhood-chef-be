@@ -5,8 +5,8 @@ module.exports = {
   inputUser: async (obj, args, ctx) => {
     try {
       let id = null;
-
-      if (args.input.photo) {
+      // upload user avatar to cloudinary
+      if (args.input.photo && !args.input.photo.startsWith('http')) {
         await cloudinary.uploader
           .upload(args.input.photo, {
             upload_preset: 'upload',
@@ -62,18 +62,22 @@ module.exports = {
     try {
       let id = null;
 
-      if (args.input.photo) {
-        await cloudinary.uploader
-          .upload(args.input.photo, {
-            upload_preset: 'upload',
-          })
-          .then((res) => {
-            args.input.photo = res.url;
-          })
-          .catch((err) => (args.input.photo = null));
-      }
       if (args.input.id) {
-        if (await checkIfExists({ id: args.input.id }, 'Events')) {
+        let foundEvent = await events.findById(args.input.id);
+        if (foundEvent) {
+          // update image on cloudinary
+          if (args.input.photo && !args.input.photo.startsWith('http')) {
+            let arr = foundEvent.photo.split('/');
+            let public_id = arr[arr.length - 1].split('.')[0];
+            await cloudinary.uploader
+              .upload(args.input.photo, {
+                public_id: public_id,
+                invalidate: true,
+              })
+              .then((res) => (args.input.photo = res.url))
+              .catch((err) => (args.input.photo = null));
+          }
+          // update event in database
           id = { id: args.input.id };
           await events.update(args.input.id, args.input);
         } else {
@@ -85,6 +89,18 @@ module.exports = {
           );
         }
       } else {
+        // upload image to cloudinary
+        if (args.input.photo && !args.input.photo.startsWith('http')) {
+          await cloudinary.uploader
+            .upload(args.input.photo, {
+              upload_preset: 'upload',
+            })
+            .then((res) => {
+              args.input.photo = res.url;
+            })
+            .catch((err) => (args.input.photo = null));
+        }
+        // create new event
         id = await events.add(args.input);
         id = { id: id.id };
       }
@@ -97,7 +113,18 @@ module.exports = {
   },
   removeEvent: async (obj, args, ctx) => {
     try {
-      if (await checkIfExists({ id: args.id }, 'Events')) {
+      let foundEvent = await events.findById(args.id);
+      if (foundEvent) {
+        // remove image from cloudinary
+        if (foundEvent.photo) {
+          let arr = foundEvent.photo.split('/');
+          let public_id = arr[arr.length - 1].split('.')[0];
+          await cloudinary.uploader.destroy(public_id, (err, result) => {
+            console.log(err);
+            console.log(result);
+          });
+        }
+        // remove event from database
         await events.remove(args.id);
         return { id: args.id };
       } else {
