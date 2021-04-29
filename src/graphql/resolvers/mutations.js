@@ -6,7 +6,7 @@ module.exports = {
     try {
       let id = null;
 
-      if (args.input.photo) {
+      if (args.input.photo && !args.input.photo.startsWith('http')) {
         await cloudinary.uploader
           .upload(args.input.photo, {
             upload_preset: 'upload',
@@ -62,7 +62,7 @@ module.exports = {
     try {
       let id = null;
 
-      if (args.input.photo) {
+      if (args.input.photo && !args.input.photo.startsWith('http')) {
         await cloudinary.uploader
           .upload(args.input.photo, {
             upload_preset: 'upload',
@@ -72,6 +72,7 @@ module.exports = {
           })
           .catch((err) => (args.input.photo = null));
       }
+
       if (args.input.id) {
         if (await checkIfExists({ id: args.input.id }, 'Events')) {
           id = { id: args.input.id };
@@ -97,7 +98,20 @@ module.exports = {
   },
   removeEvent: async (obj, args, ctx) => {
     try {
-      if (await checkIfExists({ id: args.id }, 'Events')) {
+      let foundEvent = await events.findById(args.id);
+      if (foundEvent) {
+        // remove image from cloudinary
+        if (foundEvent.photo) {
+          let arr = foundEvent.photo.split('/');
+          let public_key_plus_image_type = arr[arr.length - 1].split('.');
+          let public_key = public_key_plus_image_type[0];
+          await cloudinary.uploader.destroy(public_key, (err, result) => {
+            console.log(err);
+            console.log(result);
+            console.log(public_key, 'here');
+          });
+        }
+        // remove event from database
         await events.remove(args.id);
         return { id: args.id };
       } else {
