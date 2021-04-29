@@ -8,11 +8,9 @@ const crypto = require('crypto');
 const okta = require('@okta/okta-sdk-nodejs');
 const temp = require('temp');
 const cors = require('cors');
-
 const users = require('../models/users/user-models');
-
 const { isEmailUnique } = require('../middleware/isEmailUnique.js');
-
+const { cloudinary } = require('../graphql/utilities');
 const readFile = promisify(fs.readFile);
 const router = express.Router();
 router.use(express.json());
@@ -55,7 +53,7 @@ router.post('/register', cors(), isEmailUnique, buildHTML, async (req, res) => {
       replyTo: process.env.EMAIL_NAME,
     };
 
-    console.log(mailOptions);
+    //console.log(mailOptions);
 
     if (mailOptions.html) {
       await transport.sendMail(mailOptions, async (err, response) => {
@@ -80,6 +78,17 @@ router.post('/register', cors(), isEmailUnique, buildHTML, async (req, res) => {
       // console.log(stat, 'stat');
       if (err) console.log(err);
     });
+
+    if (req.body.photo) {
+      await cloudinary.uploader
+        .upload(req.body.photo, {
+          upload_preset: 'upload',
+        })
+        .then((res) => {
+          databaseUserObject.photo = res.url;
+        })
+        .catch((err) => (args.input.photo = null));
+    }
 
     const addedUser = await users.add(databaseUserObject);
 
