@@ -6,6 +6,18 @@ module.exports = {
     try {
       let id = null;
 
+      if (args.input.photo) {
+        await cloudinary.uploader
+          .upload(args.input.photo, {
+            upload_preset: 'upload',
+          })
+          .then((res) => {
+            args.input.photo = res.url;
+            console.log(args.input.photo);
+          })
+          .catch((err) => (args.input.photo = null));
+      }
+
       if (args.input.id) {
         if (await checkIfExists({ id: args.input.id }, 'Users')) {
           id = { id: args.input.id };
