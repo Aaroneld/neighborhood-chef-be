@@ -69,7 +69,6 @@ module.exports = {
           })
           .then((res) => {
             args.input.photo = res.url;
-            console.log(args.input.photo);
           })
           .catch((err) => (args.input.photo = null));
       }

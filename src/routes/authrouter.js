@@ -87,7 +87,7 @@ router.post('/register', cors(), isEmailUnique, buildHTML, async (req, res) => {
         .then((res) => {
           databaseUserObject.photo = res.url;
         })
-        .catch((err) => (args.input.photo = null));
+        .catch((err) => (databaseUserObject.photo = null));
     }
 
     const addedUser = await users.add(databaseUserObject);
