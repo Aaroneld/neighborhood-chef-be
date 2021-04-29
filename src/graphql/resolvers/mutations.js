@@ -61,8 +61,8 @@ module.exports = {
   inputEvent: async (obj, args, ctx) => {
     try {
       let id = null;
-
-      if (args.input.photo && !args.input.photo.startsWith('http')) {
+      // add new image to cloudinary
+      if (!args.input.id && args.input.photo && !args.input.photo.startsWith('http')) {
         await cloudinary.uploader
           .upload(args.input.photo, {
             upload_preset: 'upload',
@@ -71,6 +71,20 @@ module.exports = {
             args.input.photo = res.url;
           })
           .catch((err) => (args.input.photo = null));
+        // update a previously uploaded image on cloudinary
+      } else if (args.input.id && args.input.photo && !args.input.photo.startsWith('http')) {
+        let foundEvent = await events.findById(args.input.id);
+        if (foundEvent) {
+          let arr = foundEvent.photo.split('/');
+          let public_id = arr[arr.length - 1].split('.')[0];
+          await cloudinary.uploader
+            .upload(args.input.photo, {
+              public_id: public_id,
+              invalidate: true,
+            })
+            .then((res) => (args.input.photo = res.url))
+            .catch((err) => (args.input.photo = null));
+        }
       }
 
       if (args.input.id) {
@@ -103,12 +117,10 @@ module.exports = {
         // remove image from cloudinary
         if (foundEvent.photo) {
           let arr = foundEvent.photo.split('/');
-          let public_key_plus_image_type = arr[arr.length - 1].split('.');
-          let public_key = public_key_plus_image_type[0];
-          await cloudinary.uploader.destroy(public_key, (err, result) => {
+          let public_id = arr[arr.length - 1].split('.')[0];
+          await cloudinary.uploader.destroy(public_id, (err, result) => {
             console.log(err);
             console.log(result);
-            console.log(public_key, 'here');
           });
         }
         // remove event from database
