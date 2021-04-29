@@ -25,7 +25,6 @@ app.use((req, res, next) => {
 app.use('/auth', authRouter);
 
 app.get('/wakeup', (req, res) => {
-  console.log('here');
   res.status(200).json({ awake: true });
 });
 

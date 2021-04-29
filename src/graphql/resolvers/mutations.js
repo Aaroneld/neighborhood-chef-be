@@ -1,10 +1,21 @@
 const { users, events, comments, commentReactions } = require('../../models');
-const { checkIfExists, sendErrorRedirect } = require('../utilities');
+const { checkIfExists, sendErrorRedirect, cloudinary } = require('../utilities');
 
 module.exports = {
   inputUser: async (obj, args, ctx) => {
     try {
       let id = null;
+
+      if (args.input.photo) {
+        await cloudinary.uploader
+          .upload(args.input.photo, {
+            upload_preset: 'upload',
+          })
+          .then((res) => {
+            args.input.photo = res.url;
+          })
+          .catch((err) => (args.input.photo = null));
+      }
 
       if (args.input.id) {
         if (await checkIfExists({ id: args.input.id }, 'Users')) {
@@ -51,6 +62,16 @@ module.exports = {
     try {
       let id = null;
 
+      if (args.input.photo) {
+        await cloudinary.uploader
+          .upload(args.input.photo, {
+            upload_preset: 'upload',
+          })
+          .then((res) => {
+            args.input.photo = res.url;
+          })
+          .catch((err) => (args.input.photo = null));
+      }
       if (args.input.id) {
         if (await checkIfExists({ id: args.input.id }, 'Events')) {
           id = { id: args.input.id };
@@ -157,7 +178,6 @@ module.exports = {
           }
         } else {
           id = await comments.add(args.comment);
-          console.log('in here', id);
         }
       } else {
         sendErrorRedirect(
