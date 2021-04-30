@@ -1,20 +1,11 @@
 const { users, events, comments, commentReactions } = require('../../models');
-const { checkIfExists, sendErrorRedirect, cloudinary } = require('../utilities');
+const { checkIfExists, sendErrorRedirect, removeImage, addNewImage, updateImage } = require('../utilities');
 
 module.exports = {
   inputUser: async (obj, args, ctx) => {
     try {
-      let id = null;
-      // upload user avatar to cloudinary
       if (args.input.photo && !args.input.photo.startsWith('http')) {
-        await cloudinary.uploader
-          .upload(args.input.photo, {
-            upload_preset: 'upload',
-          })
-          .then((res) => {
-            args.input.photo = res.url;
-          })
-          .catch((err) => (args.input.photo = null));
+        args.input.photo = await addNewImage(args.input.photo);
       }
 
       if (args.input.id) {
@@ -66,16 +57,11 @@ module.exports = {
         let foundEvent = await events.findById(args.input.id);
         if (foundEvent) {
           // update image on cloudinary
-          if (args.input.photo && !args.input.photo.startsWith('http')) {
-            let arr = foundEvent.photo.split('/');
-            let public_id = arr[arr.length - 1].split('.')[0];
-            await cloudinary.uploader
-              .upload(args.input.photo, {
-                public_id: public_id,
-                invalidate: true,
-              })
-              .then((res) => (args.input.photo = res.url))
-              .catch((err) => (args.input.photo = null));
+          if (foundEvent.photo && args.input.photo && !args.input.photo.startsWith('http')) {
+            args.input.photo = await updateImage(foundEvent.photo, args.input.photo);
+            // add new photo if foundEvent doesn't have a previously uploaded image
+          } else if (!foundEvent.photo && args.input.photo && !args.input.photo.startsWith('http')) {
+            args.input.photo = await addNewImage(args.input.photo);
           }
           // update event in database
           id = { id: args.input.id };
@@ -89,16 +75,9 @@ module.exports = {
           );
         }
       } else {
-        // upload image to cloudinary
+        // upload new image to cloudinary
         if (args.input.photo && !args.input.photo.startsWith('http')) {
-          await cloudinary.uploader
-            .upload(args.input.photo, {
-              upload_preset: 'upload',
-            })
-            .then((res) => {
-              args.input.photo = res.url;
-            })
-            .catch((err) => (args.input.photo = null));
+          args.input.photo = await addNewImage(args.input.photo);
         }
         // create new event
         id = await events.add(args.input);
@@ -117,12 +96,7 @@ module.exports = {
       if (foundEvent) {
         // remove image from cloudinary
         if (foundEvent.photo) {
-          let arr = foundEvent.photo.split('/');
-          let public_id = arr[arr.length - 1].split('.')[0];
-          await cloudinary.uploader.destroy(public_id, (err, result) => {
-            console.log(err);
-            console.log(result);
-          });
+          await removeImage(foundEvent.photo);
         }
         // remove event from database
         await events.remove(args.id);

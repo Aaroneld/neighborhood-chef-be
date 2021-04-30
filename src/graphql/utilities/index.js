@@ -1,9 +1,11 @@
 const checkIfExists = require('./checkIfExists');
 const sendErrorRedirect = require('./sendErrorRedirect');
-const cloudinary = require('./cloudinary');
+const { removeImage, addNewImage, updateImage } = require('./cloudinary');
 
 module.exports = {
   checkIfExists,
   sendErrorRedirect,
-  cloudinary,
+  addNewImage,
+  removeImage,
+  updateImage,
 };

@@ -10,7 +10,7 @@ const temp = require('temp');
 const cors = require('cors');
 const users = require('../models/users/user-models');
 const { isEmailUnique } = require('../middleware/isEmailUnique.js');
-const { cloudinary } = require('../graphql/utilities');
+const { addNewImage } = require('../graphql/utilities');
 const readFile = promisify(fs.readFile);
 const router = express.Router();
 router.use(express.json());
@@ -80,14 +80,7 @@ router.post('/register', cors(), isEmailUnique, buildHTML, async (req, res) => {
     });
 
     if (req.body.photo && !req.body.photo.startsWith('http')) {
-      await cloudinary.uploader
-        .upload(req.body.photo, {
-          upload_preset: 'upload',
-        })
-        .then((res) => {
-          databaseUserObject.photo = res.url;
-        })
-        .catch((err) => (databaseUserObject.photo = null));
+      databaseUserObject.photo = await addNewImage(req.body.photo);
     }
 
     const addedUser = await users.add(databaseUserObject);
