@@ -21,6 +21,7 @@ async function addNewImage(base64) {
     const response = await cloudinary.uploader.upload(base64, {
       upload_preset: 'upload',
     });
+    console.log(response);
     return response.url;
   } catch (err) {
     console.log(err);

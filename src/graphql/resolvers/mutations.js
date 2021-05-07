@@ -76,6 +76,7 @@ module.exports = {
         }
       } else {
         // upload new image to cloudinary
+        console.log(args);
         if (args.input.photo && !args.input.photo.startsWith('http')) {
           args.input.photo = await addNewImage(args.input.photo);
         }
