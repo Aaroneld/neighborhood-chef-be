@@ -4,14 +4,21 @@ const { checkIfExists, sendErrorRedirect, removeImage, addNewImage, updateImage 
 module.exports = {
   inputUser: async (obj, args, ctx) => {
     try {
-      if (args.input.photo && !args.input.photo.startsWith('http')) {
-        args.input.photo = await addNewImage(args.input.photo);
-      }
+      let user = null;
 
       if (args.input.id) {
-        if (await checkIfExists({ id: args.input.id }, 'Users')) {
-          id = { id: args.input.id };
-          await users.update(args.input.id, args.input);
+        let foundUser = await users.findById(args.input.id);
+
+        if (foundUser) {
+          // add new image to cloudinary
+          if (!foundUser.photo && args.input.photo && !args.input.photo.startsWith('http')) {
+            args.input.photo = await addNewImage(args.input.photo);
+            // update image on cloudinary
+          } else if (foundUser.photo && args.input.photo && !args.input.photo.startsWith('http')) {
+            args.input.photo = await updateImage(foundUser.photo, args.input.photo);
+          }
+          // update user's data in database
+          user = await users.update(args.input.id, args.input);
         } else {
           sendErrorRedirect(
             ctx.res,
@@ -21,11 +28,15 @@ module.exports = {
           );
         }
       } else {
-        id = await users.add(args.input);
-        id = { id: id.id };
+        //  add new image to cloudinary
+        if (args.input.photo && !args.input.photo.startsWith('http')) {
+          args.input.photo = await addNewImage(args.input.photo);
+        }
+        // add new user to database
+        user = await users.add(args.input);
       }
 
-      return id;
+      return { id: user.id, photo: user.photo };
     } catch (err) {
       console.log(err);
       return err;
