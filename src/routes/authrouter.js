@@ -105,6 +105,15 @@ router.post('/register', cors(), isEmailUnique, buildHTML, async (req, res) => {
 router.get('/activate', async (req, res, next) => {
   try {
     let { id, email, tempPass } = req.query;
+    let url = req.url.split('?')[1];
+    const id = url.split('id=')[1].split('&')[0];
+    const email = url.split('email=')[1].split('&')[0];
+    const tempPass = url.split('tempPass=')[1];
+
+    console.log(id, email, tempPass);
+
+    // “/activate?id=cq7qnFtjfC012CsBfhDJ%2BEexUl8d3PPYjgeihG8q35o%3D&email=nightsurgeonpdx%40gmail.com&tempPass=dNxFxoy~Y7n”
+
     console.log(req.url);
 
     console.log(req.query);
