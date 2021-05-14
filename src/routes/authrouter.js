@@ -119,7 +119,7 @@ router.get('/activate', async (req, res, next) => {
 
     const compareHash = crypto
       .createHmac('sha256', process.env.EMAIL_HASH_SECRET)
-      .update(id)
+      .update(email)
       .digest('base64');
 
     const formattedId = id.replace(/\s/g, '+');
