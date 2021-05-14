@@ -103,10 +103,16 @@ router.post('/register', cors(), isEmailUnique, buildHTML, async (req, res) => {
 router.get('/activate', async (req, res, next) => {
   try {
     let { id, email, tempPass } = req.query;
+
+    console.log(req.query);
+    console.log(email, tempPass, id);
+
     email = decodeURIComponent(email);
     tempPass = decodeURIComponent(tempPass);
     id = decodeURIComponent(id);
     // console.log(req.query);
+
+    console.log(email, tempPass, id);
 
     const compareHash = crypto
       .createHmac('sha256', process.env.EMAIL_HASH_SECRET)
