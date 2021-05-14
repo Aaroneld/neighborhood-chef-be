@@ -13,6 +13,8 @@ const { isEmailUnique } = require('../middleware/isEmailUnique.js');
 const { addNewImage } = require('../graphql/utilities');
 const readFile = promisify(fs.readFile);
 const router = express.Router();
+const os = require('os');
+
 router.use(express.json());
 router.use(cors());
 
@@ -103,6 +105,7 @@ router.post('/register', cors(), isEmailUnique, buildHTML, async (req, res) => {
 router.get('/activate', async (req, res, next) => {
   try {
     let { id, email, tempPass } = req.query;
+    console.log(req.url);
 
     console.log(req.query);
     console.log(email, tempPass, id);
@@ -116,7 +119,7 @@ router.get('/activate', async (req, res, next) => {
 
     const compareHash = crypto
       .createHmac('sha256', process.env.EMAIL_HASH_SECRET)
-      .update(email)
+      .update(id)
       .digest('base64');
 
     const formattedId = id.replace(/\s/g, '+');
