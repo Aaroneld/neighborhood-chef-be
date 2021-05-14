@@ -102,7 +102,7 @@ router.post('/register', cors(), isEmailUnique, buildHTML, async (req, res) => {
 
 router.get('/activate', async (req, res, next) => {
   try {
-    const { id, email, tempPass } = req.query;
+    let { id, email, tempPass } = req.query;
     email = decodeURIComponent(email);
     password = decodeURIComponent(password);
     id = decodeURIComponent(id);
