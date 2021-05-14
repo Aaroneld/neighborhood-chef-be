@@ -64,10 +64,10 @@ const typeDefs = gql`
   }
 
   type EventUsers {
-    #   attending: [User]!
-    maybeGoing: [User]!
-    #   invited: [User]!
-    #   currentUserInvited: [User]
+    attending: [User]!
+    # maybeGoing: [User]!
+    invited: [User]!
+    currentUserInvited: [User]
   }
 
   input EventInput {

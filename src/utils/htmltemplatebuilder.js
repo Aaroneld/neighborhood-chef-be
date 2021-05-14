@@ -65,12 +65,7 @@ async function buildHTML(req, res, next) {
     // console.log('here', base64Hash);
     const tempPassword = makeTempPassword(7);
     // console.log('here', tempPassword);
-    const template = constructHTMLTemplate(
-      firstName,
-      encodeURIComponent(email),
-      encodeURIComponent(tempPassword),
-      encodeURIComponent(base64Hash)
-    );
+    const template = constructHTMLTemplate(firstName, email, tempPassword, base64Hash);
 
     // const file = await writeToFile(`${base64Hash.replace("/", "")}.html`, 'w+', (err, file) => {
 
