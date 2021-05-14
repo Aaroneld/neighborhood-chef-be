@@ -104,7 +104,7 @@ router.get('/activate', async (req, res, next) => {
   try {
     let { id, email, tempPass } = req.query;
     email = decodeURIComponent(email);
-    password = decodeURIComponent(password);
+    tempPass = decodeURIComponent(tempPass);
     id = decodeURIComponent(id);
     // console.log(req.query);
 
