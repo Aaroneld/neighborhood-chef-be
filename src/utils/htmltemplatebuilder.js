@@ -60,7 +60,7 @@ async function buildHTML(req, res, next) {
 
     const base64Hash = crypto
       .createHmac('sha256', `${process.env.EMAIL_HASH_SECRET}`)
-      .update(hash)
+      .update(base64Hash)
       .digest('base64');
     // console.log('here', base64Hash);
     const tempPassword = makeTempPassword(7);
