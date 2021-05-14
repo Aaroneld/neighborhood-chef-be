@@ -68,6 +68,19 @@ function findInvitedUsersForEvent(id) {
     .where({ 'ei.event_id': id });
 }
 
+function findMaybeGoingUsersForEvent(id) {
+  return db('Events')
+    .select('Users.*', 'Events_Status.status')
+    .join('Events_Status', 'Events_Status.event_id', 'Events.id')
+    .join('Users', 'Users.id', 'Events_Status.user_id')
+    .where((builder) => {
+      builder.where({ 'Events.id': id });
+    })
+    .andWhere(function () {
+      this.whereIn('Events_Status.status', ['MAYBE']);
+    });
+}
+
 function findAttendingUsersForEvent(id) {
   return db('Events')
     .select('Users.*', 'Events_Status.status')

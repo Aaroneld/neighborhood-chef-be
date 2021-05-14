@@ -2,9 +2,7 @@ const fs = require('fs');
 const { promisify } = require('util');
 const crypto = require('crypto');
 const temp = require('temp');
-const os = require('os');
 
-const writeToFile = promisify(fs.open);
 const asyncTempOpen = promisify(temp.open);
 const asyncWrite = promisify(fs.write);
 const asyncClose = promisify(fs.close);
@@ -12,13 +10,12 @@ const asyncClose = promisify(fs.close);
 const makeTempPassword = (length) => {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~';
-  const charactersLength = characters.length;
   const specialChars = '~';
   const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
   const numbers = '1234567890';
   for (var i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
   result += specialChars.charAt(Math.floor(Math.random() * specialChars.length));
   result += uppercaseChars.charAt(Math.floor(Math.random() * uppercaseChars.length));
@@ -68,7 +65,12 @@ async function buildHTML(req, res, next) {
     // console.log('here', base64Hash);
     const tempPassword = makeTempPassword(7);
     // console.log('here', tempPassword);
-    const template = constructHTMLTemplate(firstName, email, tempPassword, base64Hash);
+    const template = constructHTMLTemplate(
+      firstName,
+      encodeURIComponent(email),
+      encodeURIComponent(tempPassword),
+      encodeURIComponent(base64Hash)
+    );
 
     // const file = await writeToFile(`${base64Hash.replace("/", "")}.html`, 'w+', (err, file) => {
 

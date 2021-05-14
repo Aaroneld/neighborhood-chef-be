@@ -101,15 +101,16 @@ module.exports = {
     },
   },
   EventUsers: {
-    attending: async (obj) => await events.findAttendingUsersForEvent(obj.id),
-    invited: async (obj) => await events.findInvitedUsersForEvent(obj.id),
-    currentUserInvited: async (obj, _, ctx) => {
-      if (ctx.currentUser) {
-        return await events.findUsersYouInvitedToParticularEvent(obj.id, ctx.currentUser);
-      } else {
-        return [];
-      }
-    },
+    // attending: async (obj) => await events.findAttendingUsersForEvent(obj.id),
+    // invited: async (obj) => await events.findInvitedUsersForEvent(obj.id),
+    maybeGoing: async (obj) => await events.findMaybeGoingUsers(obj.id),
+    // currentUserInvited: async (obj, _, ctx) => {
+    //   if (ctx.currentUser) {
+    //     return await events.findUsersYouInvitedToParticularEvent(obj.id, ctx.currentUser);
+    //   } else {
+    //     return [];
+    //   }
+    // },
   },
   UserEvents: {
     owned: async (obj) => await events.findBy({ user_id: obj.id }),
