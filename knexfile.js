@@ -50,7 +50,6 @@ module.exports = {
     migrations: {
       directory: './data/migrations',
       tableName: 'knex_migrations',
-      schemaName: 'nhcredux-schema',
     },
     seeds: { directory: './data/seeds' },
   },
