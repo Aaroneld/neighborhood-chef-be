@@ -112,13 +112,13 @@ router.get('/activate', async (req, res, next) => {
 
     // “/activate?id=cq7qnFtjfC012CsBfhDJ%2BEexUl8d3PPYjgeihG8q35o%3D&email=nightsurgeonpdx%40gmail.com&tempPass=dNxFxoy~Y7n”
 
-    console.log(req.url);
+    // console.log(req.url);
 
     console.log(email, tempPass, id);
 
-    email = decodeURIComponent(email);
-    tempPass = decodeURIComponent(tempPass);
-    id = decodeURIComponent(id);
+    // email = decodeURIComponent(email);
+    // tempPass = decodeURIComponent(tempPass);
+    // id = decodeURIComponent(id);
 
     const compareHash = crypto
       .createHmac('sha256', process.env.EMAIL_HASH_SECRET)
@@ -159,7 +159,7 @@ router.get('/activate', async (req, res, next) => {
       });
 
       const formattedResponse = await response.json();
-      // console.log(formattedResponse);
+      console.log(formattedResponse);
 
       const hash = crypto
         .createHmac('sha256', process.env.EMAIL_HASH_SECRET)
