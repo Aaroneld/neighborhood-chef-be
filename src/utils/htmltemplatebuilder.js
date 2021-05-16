@@ -67,7 +67,7 @@ async function buildHTML(req, res, next) {
     // console.log('here', tempPassword);
     const template = constructHTMLTemplate(
       firstName,
-      encodeURIComponent(email),
+      email,
       encodeURIComponent(tempPassword),
       encodeURIComponent(base64Hash)
     );
