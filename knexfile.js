@@ -36,7 +36,7 @@ module.exports = {
 
   production: {
     client: 'pg',
-    searchPath: 'database_schema',
+    searchPath: 'public',
     connection: {
       connectionString: process.env.POSTGRES_CONNECTION_STRING,
       ssl: {
