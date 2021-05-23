@@ -60,13 +60,16 @@ router.post('/register', cors(), isEmailUnique, buildHTML, async (req, res) => {
     if (mailOptions.html) {
       await transport.sendMail(mailOptions, async (err, response) => {
         try {
-          if (err)
-            res.status(500).json({
-              success: false,
-              trace: err.stack,
-              message: err.message,
-            });
+          if (err) console.log(err);
+
+          res.status(500).json({
+            success: false,
+            trace: err.stack,
+            message: err.message,
+          });
         } catch (err) {
+          console.log(err);
+
           res.status(500).json({
             success: false,
             trace: err.stack,
