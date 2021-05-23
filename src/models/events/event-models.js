@@ -19,6 +19,7 @@ module.exports = {
   addEventInvite,
   removeEventInvite,
   findUsersYouInvitedToParticularEvent,
+  findMaybeGoingUsersForEvent,
 };
 
 function find() {
@@ -77,7 +78,7 @@ function findMaybeGoingUsersForEvent(id) {
       builder.where({ 'Events.id': id });
     })
     .andWhere(function () {
-      this.whereIn('Events_Status.status', ['MAYBE']);
+      this.whereIn('Events_Status.status', ['MAYBE_GOING']);
     });
 }
 

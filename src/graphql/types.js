@@ -65,7 +65,7 @@ const typeDefs = gql`
 
   type EventUsers {
     attending: [User]!
-    # maybeGoing: [User]!
+    maybeGoing: [User]!
     invited: [User]!
     currentUserInvited: [User]
   }

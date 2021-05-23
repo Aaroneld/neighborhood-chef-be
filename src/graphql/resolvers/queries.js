@@ -103,7 +103,7 @@ module.exports = {
   EventUsers: {
     attending: async (obj) => await events.findAttendingUsersForEvent(obj.id),
     invited: async (obj) => await events.findInvitedUsersForEvent(obj.id),
-    // maybeGoing: async (obj) => await events.findMaybeGoingUsers(obj.id),
+    maybeGoing: async (obj) => await events.findMaybeGoingUsersForEvent(obj.id),
     currentUserInvited: async (obj, _, ctx) => {
       if (ctx.currentUser) {
         return await events.findUsersYouInvitedToParticularEvent(obj.id, ctx.currentUser);
