@@ -1,6 +1,7 @@
 # Neighborhood Chef
 
-The back-end is deployed on AWS RDS at [be.ourneighborhoodchef.com](https://be.ourneighborhoodchef.com)
+The back-end is deployed on Heroku at ["nhcredux-be.herokuapp.com"]("https://nhcredux-be.herokuapp.com/")
+The front-end is deployed on netlify at ["neighborhoodchef.netlify.app/"]("https://neighborhoodchef.netlify.app/")
 
 ![build](https://github.com/Lambda-School-Labs/neighborhood-chef-be/workflows/build/badge.svg)
 <a href="https://codeclimate.com/github/Aaroneld/neighborhood-chef-be/maintainability"><img src="https://api.codeclimate.com/v1/badges/3cd3e60d599dcbfebc58/maintainability" /></a>
@@ -9,11 +10,11 @@ The back-end is deployed on AWS RDS at [be.ourneighborhoodchef.com](https://be.o
 
 ## Contributors
 
-|                                                          [Kyle Richardson](https://github.com/kyle-richardson)                                                           |                                                       [Paul Edwards](https://github.com/PaulMEdwards)                                                        |                                                      [Aaron Merrifield-Lucier](https://github.com/Aaroneld)                                                       |                                                       [Brennan Neilson](https://github.com/bvneilson)                                                        |                                                      [Patrick Replogle](https://github.com/patrick-replogle)                                                       |                                                          [Miguel Leal](https://twitter.com/lealitos)                                                           |
-| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: |
+|                                                          [Kyle Richardson](https://github.com/kyle-richardson)                                                           |                                                           [Paul Edwards](https://github.com/PaulMEdwards)                                                           |                                                      [Aaron Merrifield-Lucier](https://github.com/Aaroneld)                                                       |                                                          [Brennan Neilson](https://github.com/bvneilson)                                                           |                                                          [Patrick Replogle](https://github.com/patrick-replogle)                                                          |                                                            [Miguel Leal](https://twitter.com/lealitos)                                                             |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | [<img src="https://avatars3.githubusercontent.com/u/52683176?s=400&u=864097615ff093d54d380d2d7d9d36bc0aebf60b&v=4" width = "200" />](https://github.com/kyle-richardson) | [<img src="https://avatars1.githubusercontent.com/u/153847?s=400&u=9ce092b1023143bff17fd34191c0768a1f8fe5ea&v=4" width = "200" />](https://github.com/PaulMEdwards) | [<img src="https://avatars2.githubusercontent.com/u/52682445?s=400&u=158e754213409df82f96c0f9f9a52821e9c81d1d&v=4" width = "200" />](https://github.com/Aaroneld) | [<img src="https://avatars3.githubusercontent.com/u/12500686?s=400&u=9ab949e147ba9fe8c58fe50a891c3daf8dcd21b4&v=4" width = "200" />](https://github.com/bvneilson) | [<img src="https://avatars2.githubusercontent.com/u/50844285?s=400&u=7ffa88c4c221bf888b1771fec72530ac156d90c6&v=4" width = "200" />](https://github.com/patrick-replogle) | [<img src="https://avatars3.githubusercontent.com/u/50895333?s=400&u=26d4e7b29f44be371e3dffec0aff81c960937093&v=4" width = "200" />](https://twitter.com/lealitos) |
-|                                       [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/kyle-richardson)                                       |                            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/PaulMEdwards)                             |                          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Aaroneld)                           |                          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/bvneilson)                           |                           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/patrick-replogle)                            |  [<img src="https://twitter.com/favicon.ico" width="15"> ](https://twitter.com/lealitos)                            |
-|                      [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://linkedin.com/in/kyle-m-richardson)                       |                 [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/paulmedwards/)                 |                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/aaron-merrifield-234477195/)                |                 [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/brennanneilson/)                 |                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/patrick-replogle-409a92193/)                |               [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/miguel-leal-6b6905168/)            |
+|                                       [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/kyle-richardson)                                       |                                      [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/PaulMEdwards)                                      |                                       [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Aaroneld)                                       |                                       [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/bvneilson)                                       |                                       [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/patrick-replogle)                                       |                                      [<img src="https://twitter.com/favicon.ico" width="15"> ](https://twitter.com/lealitos)                                       |
+|                      [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://linkedin.com/in/kyle-m-richardson)                       |                    [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/paulmedwards/)                    |            [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/aaron-merrifield-234477195/)            |                  [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/brennanneilson/)                   |                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/patrick-replogle-409a92193/)                |               [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/miguel-leal-6b6905168/)               |
 
 # API Documentation
 
@@ -22,7 +23,7 @@ The back-end is deployed on AWS RDS at [be.ourneighborhoodchef.com](https://be.o
 To get the server running locally:
 
 - Clone this repo
-- **yarn install** to install all required dependencies
+- **yarn or npm install** to install all required dependencies
 - **Install Postgres Docker** (see section of same name) to setup PostgreSQL Docker development instance
 - **yarn server** to start the local server
 
@@ -34,365 +35,192 @@ Testing:
 - **yarn test:watchWithLogs** to view logs while using testing environment
 - **yarn coverage** to view test coverage
 
-### Install Postgres Docker
-
-First, ensure you've created a file named `/.env` with the same variable names as in the `/.env.example` file. The values can differ from the examples based on your preferred settings, if desired.
-
-On Windows, it's probably best to setup `Windows Subsystem for Linux v2` (`WSL2`), [available in Windows 10, version 2004](https://devblogs.microsoft.com/commandline/wsl2-will-be-generally-available-in-windows-10-version-2004/), and the `Microsoft Terminal (preview)` app from the Microsoft App Store. Instructions below for Ubuntu Linux can be followed in `WSL2` if you install the Ubuntu instance. `Docker Desktop` for Windows only works on Windows 10 Professional or Enterprise/Workstation editions, it will not install on Home edition. You can use the older `docker toolkit` on Windows 10 Home and run the script in it's included Bash shell.
-
-Ensure you have installed these pre-requisites:
-
-- `Docker Desktop`, `docker toolkit`, or `docker.io` Community Edition. Ensure the command line application (`docker`) is in your path and available when issuing the command `docker`.
-  - Ubuntu Linux: `sudo apt install docker.io`
-  - Windows/macOS: download & install Docker Desktop
-- Postgres command line application (`psql`) in your path and available when issuing the command `psql`.
-  - Ubuntu Linux: `sudo apt install postgresql-client` (and its dependencies). You do not need to install the server.
-  - Windows/macOS: download PostgreSQL and install at minimum the command line application. If you install the PostgreSQL service, it will conflict with the docker instance we're trying to setup, so be sure to disable the PostgreSQL service provided by the installer if you install it.
-- Knex command line application (`knex`) globally installed so that it is in your path and available when issuing the command `knex`.
-  - All (in terminal): `sudo yarn global add knex` or `sudo npm i -g knex`
-
-Then, ensure the script has `execute` permission, and run the script in a Bash (Linux/WSL) or Zsh (macOS) Shell session:
-
-`cd data; chmod +x postgres-docker.bash; ./postgres-docker.bash`
-
-If prompted for a password, input your currently logged-in user's password to perform the requested command as superuser. This assumes your user has the privilege to do so as a "sudoer".
-
 ### Backend framework
 
 - Node
 - Express
 - Graphql
 - Knex
-- AWS RDS
+- Heroku
 - PostgreSQL
 
 ## Graphql Queries and Mutations
 
 #### User
 
-
-| Type     | Name               | variables                          | Description                             |
-| -------- | ------------------ | ---------------------------------- | --------------------------------------- |
-| Query    | getAllUsers        | none                               | Returns all users                       |
-| Query    | getUserById        | (id: ID!)                          | Returns a single user                   |
-| Query    | getUserByEmail     | (input: UserEmailInput!)           | Returns a single user                   |
-| Query    | getAuthoredEvents  | (id: ID!)                          | Returns logged in user's events         |
-| Query    | getInvitedEvents   | (id: ID!)                          | Returns events that user is invited too |
-| Query    | getAttendingEvents | (id: ID!)                          | Returns events user is attending        |
-| Query    | getFavoriteEvents  | (id: ID!)                          | Returns user's favorite events          |
-| Mutation | addUser            | (input: NewUserInput!)             | Adds a user account                     |
-| Mutation | updateUser         | (id: ID!, input: UpdateUserInput!) | Updates a user account                  |
-| Mutation | removeUser         | (id: ID!)                          | Deletes a user account                  |
-| Mutation | addFavoriteEvent   | (input: NewFavoriteEventInput!)    | Adds an event to user's favorite list   |
-| Mutation | removeFavoriteEvent| (input: RemoveFavoriteEventInput!) | Removes event from user's favorite list |
+| Type     | Name                | variables                    | Description                             |
+| -------- | ------------------- | ---------------------------- | --------------------------------------- |
+| Query    | Users               | (queryParams: UserInput)     | Returns all users                       |
+| Mutation | inputUser           | (input: UserInput!)          | Adds a new user or updates user account |
+| Mutation | removeUser          | (id: ID!)                    | Deletes a user account                  |
+| Mutation | favoriteEventInput  | (input: FavoriteEventInput!) | Adds an event to user's favorite list   |
+| Mutation | removeFavoriteEvent | (input: FavoriteEventInput!) | Removes event from user's favorite list |
 
 #### Event
 
-| Type     | Name              | variables                           | Description                             |
-| -------- | ----------------- | ----------------------------------- | --------------------------------------- |
-| Query    | getAllEvents      | none                                | Returns all events                      |
-| Query    | getEventById      | (id: ID!)                           | Returns a single event                  |
-| Query    | getUninvitedUsers | (id: ID!)                           | Returns users not invited to event      |
-| Mutation | addEvent          | (input: NewEventInput!)             | Adds a new event                        |
-| Mutation | updateEvent       | (id: ID!, input: UpdateEventInput!) | Updates an event                        |
-| Mutation | removeEvent       | (id: ID!)                           | Deletes an event                        |
-| Mutation | inviteUserToEvent | (input: EventInviteInput!)          | Invites user to event                   |
-| Mutation | updateInvitation  | (input: UpdateInviteInput!)         | Update invitation status                |
-| Mutation | removeInvitation  | (input: RemoveInviteInput!)         | Deletes an invitation                   |
-
-#### Category
-
-| Type     | Name            | variables                  | Description               |
-| -------- | --------------- | -------------------------- | ------------------------- |
-| Query    | getCategories   | none                       | Returns all categories    |
-| Query    | getCategoryById | (id: ID!)                  | Returns a single category |
-| Mutation | addCategory     | (input: NewCategoryInput!) | Adds a new category       |
+| Type     | Name              | variables                                   | Description              |
+| -------- | ----------------- | ------------------------------------------- | ------------------------ |
+| Query    | Events            | (queryParams: EventInput, currentUser: Int) | Returns all events       |
+| Mutation | inputEvent        | (input: EventInput!)                        | Add/update an event      |
+| Mutation | removeEvent       | (id: ID!)                                   | Deletes an event         |
+| Mutation | inputEventInvite  | (inviteInput: EventInviteInput!)            | Invites user to event    |
+| Mutation | updateInvitation  | (input: UpdateInviteInput!)                 | Update invitation status |
+| Mutation | removeEventInvite | (inviteInput: EventInviteInput!)            | Deletes an invitation    |
+| Mutation | inputComment      | (comment: CommentInput!)                    | Add comment to event     |
+| Mutation | removeComment     | (id: ID!)                                   | Delete a comment         |
+| Mutation | handleReaction    | (reaction: ReactionInput!)                  | React to a comment       |
+| Mutation | inputEventStatus  | (eventStatus: EventStatusInput!)            | RSVP to event            |
+| Mutation | removeEventStatus | (event_id: Int!, user_id: Int!)             | Remove RSVP              |
 
 #### Comments
 
-| Type     | Name                  | variables                          | Description                                    |
-| -------- | --------------------- | ---------------------------------- | ---------------------------------------------- |
-| Query    | getEventComments      | (id: ID!)                          | Returns all event comments                     |
-| Query    | getCommentReactions   | (id: ID!)                          | Returns all comment reactions                  |
-| Mutation | addComment | (id: ID!)| (input: !NewCommentInput)          | Returns create comment                         |
-| Mutation | updateComment         | (id: ID!, input: !NewCommentInput) | Returns updated comment                        |
-| Mutation | removeComment         | (id: ID!)                          | Returns deleted comment                        |
-| Mutation | handleReaction        | (input: ReactionInput!)            | Dynamically adds, updates, or deletes reaction |
-
-#### Event Ingredients
-
-| Type     | Name                    | variables                           | Description                  |  
-| -------- | ----------------------- | ----------------------------------- | ---------------------------- |
-| Query    | getIngredientsByEventId | (event_id: Int!)                    | Returns all event ingredients|
-| Mutation | addEventIngredients     | (input: EventIngredientsInput!)     | Adds event ingredients       |
-| Mutation | EventIngredientUpdate   | (input: EventIngredientUpdateInput )| Updates event ingredients    |
-| Mutation | removeEventIngredient   | (id: ID!) | Returns deleted comment | Deletes event ingredient     |
+| Type     | Name                | variables                          | Description                                    |
+| -------- | ------------------- | ---------------------------------- | ---------------------------------------------- | ---------------------- |
+| Query    | getEventComments    | (id: ID!)                          | Returns all event comments                     |
+| Query    | getCommentReactions | (id: ID!)                          | Returns all comment reactions                  |
+| Mutation | addComment          | (id: ID!)                          | (input: !NewCommentInput)                      | Returns create comment |
+| Mutation | updateComment       | (id: ID!, input: !NewCommentInput) | Returns updated comment                        |
+| Mutation | removeComment       | (id: ID!)                          | Returns deleted comment                        |
+| Mutation | handleReaction      | (input: ReactionInput!)            | Dynamically adds, updates, or deletes reaction |
 
 # Data Model
 
 #### User Type and Inputs
 
 ```graphql
-  type User {
-    id: ID!
-    email: String!
-    firstName: String!
-    lastName: String!
-    gender: String
-    address: String!
-    latitude: Float!
-    longitude: Float!
-    photo: String
-    eventsOwned: [Event]!
-    status: String
-    allergens: JSON
-    dietaryRestrictions: JSON
-    dietaryPreferences: JSON
-    children: JSON
-    pets: JSON
-  }
+type User {
+  id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+  gender: String
+  address: String!
+  latitude: Float!
+  longitude: Float!
+  photo: String
+  status: String
+  UserEvents: UserEvents
+  biography: String
+}
 ```
 
 ```graphql
-  input NewUserInput {
-    id: ID
-    email: String!
-    firstName: String!
-    lastName: String!
-    gender: String
-    address: String!
-    latitude: Float!
-    longitude: Float!
-    photo: String
-    allergens: JSON
-    dietaryRestrictions: JSON
-    dietaryPreferences: JSON
-    children: JSON
-    pets: JSON
-  }
-```
-
-```graphql
-  input UpdateUserInput {
-    id: ID
-    email: String
-    firstName: String
-    lastName: String
-    gender: String
-    address: String
-    latitude: Float
-    longitude: Float
-    photo: String
-    allergens: JSON
-    dietaryRestrictions: JSON
-    dietaryPreferences: JSON
-    children: JSON
-    pets: JSON
-  }
-```
-
-```graphql
-  input UserEmailInput {
-    email: String!
-  }
-
+input UserInput {
+  id: ID
+  email: String
+  firstName: String
+  lastName: String
+  gender: String
+  address: String
+  latitude: Float
+  longitude: Float
+  radius: Int
+  photo: String
+  activated: Boolean
+  biography: String
+}
 ```
 
 #### Event Type and Inputs
 
 ```graphql
-  type Event {
-    id: ID!
-    startTime: String!
-    endTime: String
-    createDateTime: String!
-    title: String!
-    description: String!
-    photo: String!
-    category_id: Int!
-    user_id: Int!
-    modifiers: JSON
-    hashtags: JSON
-    dietaryWarnings: JSON
-    allergenWarnings: JSON
-    address: String!
-    latitude: Float!
-    longitude: Float!
-    users: [User!]
-  }
+type Event {
+  id: ID
+  createDateTime: String
+  startTime: String!
+  endTime: String
+  title: String!
+  description: String!
+  User: User!
+  photo: String
+  category: String
+  modifiers: [String]
+  hashtags: [String]
+  dietaryWarnings: [String]
+  allergenWarnings: [String]
+  address: String!
+  latitude: Float!
+  longitude: Float!
+  Comments: [Comment]!
+  EventUsers: EventUsers!
+  status: Status!
+}
 ```
 
 ```graphql
-  input NewEventInput {
-    id: ID
-    createDateTime: String
-    startTime: String!
-    endTime: String
-    title: String!
-    description: String!
-    user_id: Int!
-    photo: String
-    category_id: Int!
-    modifiers: JSON
-    hashtags: JSON
-    dietaryWarnings: JSON
-    allergenWarnings: JSON
-    address: String!
-    latitude: Float!
-    longitude: Float!
-  }
-```
-
-```graphql
-  input UpdateEventInput {
-    id: ID
-    startTime: String
-    endTime: String
-    title: String
-    description: String
-    photo: String
-    category_id: Int
-    user_id: Int
-    modifiers: JSON
-    hashtags: JSON
-    dietaryWarnings: JSON
-    allergenWarnings: JSON
-    address: String
-    latitude: Float
-    longitude: Float
-  }
+input EventInput {
+  id: ID
+  createDateTime: String
+  startTime: String
+  endTime: String
+  title: String
+  description: String
+  user_id: Int
+  photo: String
+  category: String
+  modifiers: [String]
+  hashtags: [String]
+  dietaryWarnings: [String]
+  allergenWarnings: [String]
+  address: String
+  latitude: Float
+  longitude: Float
+  status: Status
+}
 ```
 
 #### EventInvite Inputs
 
 ```graphql
-  input EventInviteInput {
-    event_id: Int!
-    user_id: Int!
-    inviter_id: Int!
-    status: String!
-  }
+input EventInviteInput {
+  event_id: Int!
+  inviter_id: Int!
+  user_id: Int!
+}
 ```
 
-```graphql
-  input UpdateInviteInput {
-    event_id: Int!
-    user_id: Int!
-    status: String!
-  }
-```
-
-```graphql
- input RemoveInviteInput {
-    event_id: Int!
-    user_id: Int!
-  }
-```
-
-#### Category Type and Inputs
-
-```graphql
-  type Category {
-    id: ID!
-    category: String!
-  }
-```
-
-```graphql
- input NewCategoryInput {
-    id: ID
-    category: String!
-  }
-```
-
-#### Event Ingredient Type and Inputs
-
-
-```graphql
-  type EventIngredient {
-    id: ID!
-    event_id: Int!
-    description: String!
-    requested: Boolean! 
-    user_id: Int
-  }
-```
-```graphql
- input EventIngredientsInput {
-    ingredients: [EventIngredientInput]
-  }
-```
-```graphql
-  input EventIngredientInput {
-    event_id: Int!
-    description: String!
-    requested: Boolean! 
-    user_id: Int
-  }
-```
-
-```graphql
-  input EventIngredientUpdateInput {
-    id: ID
-    event_id: Int
-    description: String
-    requested: Boolean 
-    user_id: Int
-  }
-```
 #### comment/reactions Type and Inputs
 
 ```graphql
-  type Comment {
-    id: ID!
-    event_id: Int!
-    user_id: Int!
-    parent_id: Int!
-    root_id: Int!
-    dateCreated: String!
-    comment: String!
-    user: User!
-  }
+type Comment {
+  id: ID!
+  event_id: Int!
+  parent: User
+  root_id: Int
+  dateCreated: String!
+  comment: String!
+  Reactions: [Reaction]
+  User: User!
+  Parent: User
+  Subcomments: [Comment]
+}
 ```
 
 ```graphql
-  input NewCommentInput {
-    id: ID
-    event_id: Int!
-    user_id: Int!
-    parent_id: Int!
-    root_id: Int!
-    dateCreated: String!
-    comment: String!
-  }
-```
-
-```graphql
-  input UpdateCommentInput {
-    id: ID
-    event_id: Int
-    user_id: Int
-    parent_id: Int
-    root_id: Int
-    dateCreated: String
-    comment: String
-  }
+input CommentInput {
+  event_id: Int
+  user_id: Int
+  parent_id: Int
+  root_id: Int
+  dateCreated: String
+  comment: String
+}
 ```
 
 ```graphql
 type Reaction {
-    comment_id: Int!
-    user_id: Int!
-    reaction: String!
-  }
+  comment_id: Int!
+  user_id: Int!
+  reaction: String!
+}
 ```
 
 ```graphql
-  input ReactionInput {
-    comment_id: Int!
-    user_id: Int!
-    reaction: String!
-  }
+input ReactionInput {
+  comment_id: Int
+  user_id: Int
+  reaction: String
+}
 ```
 
 ## Environment Variables
@@ -438,4 +266,4 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](https://github.com/Lambda-School-Labs/neighborhood-chef-fe/blob/master/README.md) for details on the fronend of our project.
+See [Frontend Documentation](https://github.com/Lambda-School-Labs/neighborhood-chef-fe/blob/master/README.md) for details on the frontend of our project.
