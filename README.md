@@ -24,9 +24,8 @@ The front-end is deployed on netlify at [neighborhoodchef.netlify.app/](https://
 To get the server running locally:
 
 - Clone this repo
-- **yarn or npm install** to install all required dependencies
-- **Install Postgres Docker** (see section of same name) to setup PostgreSQL Docker development instance
-- **yarn server** to start the local server
+- **yarn install** to install all required dependencies
+- **yarn run server** to start the local server
 
 Testing:
 
