@@ -1,7 +1,6 @@
 # Neighborhood Chef
 
 The back-end is deployed on Heroku at ["nhcredux-be.herokuapp.com"]("https://nhcredux-be.herokuapp.com/")
-The front-end is deployed on netlify at ["neighborhoodchef.netlify.app/"]("https://neighborhoodchef.netlify.app/")
 
 ![build](https://github.com/Lambda-School-Labs/neighborhood-chef-be/workflows/build/badge.svg)
 <a href="https://codeclimate.com/github/Aaroneld/neighborhood-chef-be/maintainability"><img src="https://api.codeclimate.com/v1/badges/3cd3e60d599dcbfebc58/maintainability" /></a>
