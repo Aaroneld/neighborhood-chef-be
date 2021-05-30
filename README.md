@@ -57,7 +57,7 @@ Testing:
 | Mutation | favoriteEventInput  | (input: FavoriteEventInput!) | Adds an event to user's favorite list   |
 | Mutation | removeFavoriteEvent | (input: FavoriteEventInput!) | Removes event from user's favorite list |
 
-#### Event
+#### Event & Event Comments
 
 | Type     | Name              | variables                                   | Description              |
 | -------- | ----------------- | ------------------------------------------- | ------------------------ |
@@ -72,17 +72,6 @@ Testing:
 | Mutation | handleReaction    | (reaction: ReactionInput!)                  | React to a comment       |
 | Mutation | inputEventStatus  | (eventStatus: EventStatusInput!)            | RSVP to event            |
 | Mutation | removeEventStatus | (event_id: Int!, user_id: Int!)             | Remove RSVP              |
-
-#### Comments
-
-| Type     | Name                | variables                          | Description                                    |
-| -------- | ------------------- | ---------------------------------- | ---------------------------------------------- | ---------------------- |
-| Query    | getEventComments    | (id: ID!)                          | Returns all event comments                     |
-| Query    | getCommentReactions | (id: ID!)                          | Returns all comment reactions                  |
-| Mutation | addComment          | (id: ID!)                          | (input: !NewCommentInput)                      | Returns create comment |
-| Mutation | updateComment       | (id: ID!, input: !NewCommentInput) | Returns updated comment                        |
-| Mutation | removeComment       | (id: ID!)                          | Returns deleted comment                        |
-| Mutation | handleReaction      | (input: ReactionInput!)            | Dynamically adds, updates, or deletes reaction |
 
 # Data Model
 
