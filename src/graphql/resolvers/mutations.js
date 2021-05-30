@@ -10,12 +10,28 @@ module.exports = {
         let foundUser = await users.findById(args.input.id);
 
         if (foundUser) {
-          // add new image to cloudinary
+          // add new profile image to cloudinary
           if (!foundUser.photo && args.input.photo && !args.input.photo.startsWith('http')) {
             args.input.photo = await addNewImage(args.input.photo);
-            // update image on cloudinary
+            // update profile image on cloudinary
           } else if (foundUser.photo && args.input.photo && !args.input.photo.startsWith('http')) {
             args.input.photo = await updateImage(foundUser.photo, args.input.photo);
+          }
+
+          if (
+            // add new banner photo to cloudinary
+            !foundUser.bannerPhoto &&
+            args.input.bannerPhoto &&
+            !args.input.bannerPhoto.startsWith('http')
+          ) {
+            args.input.bannerPhoto = await addNewImage(args.input.bannerPhoto);
+            // update banner photo on cloudinary
+          } else if (
+            foundUser.bannerPhoto &&
+            args.input.bannerPhoto &&
+            !args.input.bannerPhoto.startsWith('http')
+          ) {
+            args.input.bannerPhoto = await updateImage(foundUser.bannerPhoto, args.input.bannerPhoto);
           }
           // update user's data in database
           user = await users.update(args.input.id, args.input);
@@ -44,7 +60,17 @@ module.exports = {
   },
   removeUser: async (obj, args, ctx) => {
     try {
-      if (await checkIfExists({ id: args.id }, 'Users')) {
+      let foundUser = await users.findById(args.id);
+      if (foundUser) {
+        // remove profile image from cloudinary
+        if (foundUser.photo) {
+          await removeImage(foundUser.photo);
+        }
+        // remove banner image from cloudinary
+        if (foundUser.bannerPhoto) {
+          await removeImage(foundUser.bannerPhoto);
+        }
+        // remove user from database
         await users.remove(args.id);
         return { id: args.id };
       } else {

@@ -24,6 +24,7 @@ const typeDefs = gql`
     status: String
     UserEvents: UserEvents
     biography: String
+    bannerPhoto: String
   }
 
   input UserInput {
@@ -39,6 +40,7 @@ const typeDefs = gql`
     photo: String
     activated: Boolean
     biography: String
+    bannerPhoto: String
   }
 
   type Event {
