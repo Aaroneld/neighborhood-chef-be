@@ -43,6 +43,7 @@ Testing:
 - Knex
 - Heroku
 - PostgreSQL
+- Cloudinary -> File Storage
 
 ## Graphql Queries and Mutations
 
